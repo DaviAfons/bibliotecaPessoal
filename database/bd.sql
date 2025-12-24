@@ -36,3 +36,8 @@ CREATE TABLE IF NOT EXISTS livro_genero (
     FOREIGN KEY (livro_id) REFERENCES livros(id) ON DELETE CASCADE,
     FOREIGN KEY (genero_id) REFERENCES generos(id) ON DELETE CASCADE
 );
+
+ALTER TABLE usuarios
+ADD COLUMN foto_perfil VARCHAR(255) DEFAULT 'default.png';
+ALTER TABLE livros
+ADD COLUMN foto_livro VARCHAR(255) DEFAULT 'default_book.png';
