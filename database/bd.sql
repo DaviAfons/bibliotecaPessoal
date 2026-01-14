@@ -1,12 +1,14 @@
 CREATE DATABASE IF NOT EXISTS biblioteca;
 USE biblioteca;
 
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    data_nascimento DATE,
+    bio TEXT,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS livros (
@@ -36,8 +38,3 @@ CREATE TABLE IF NOT EXISTS livro_genero (
     FOREIGN KEY (livro_id) REFERENCES livros(id) ON DELETE CASCADE,
     FOREIGN KEY (genero_id) REFERENCES generos(id) ON DELETE CASCADE
 );
-
-ALTER TABLE usuarios
-ADD COLUMN foto_perfil VARCHAR(255) DEFAULT 'default.png';
-ALTER TABLE livros
-ADD COLUMN foto_livro VARCHAR(255) DEFAULT 'default_book.png';
