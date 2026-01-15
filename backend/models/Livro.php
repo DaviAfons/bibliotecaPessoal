@@ -27,8 +27,11 @@ class Livro {
         }
     }
 
-    public function listarPorUsuario($usuario_id) {
-    $sql = "SELECT l.*, GROUP_CONCAT(g.nome SEPARATOR ', ') as generos_nomes
+public function listarPorUsuario($usuario_id) {
+    // Adicionamos g.id no select para o Front-end saber quais marcar
+    $sql = "SELECT l.*, 
+            GROUP_CONCAT(g.nome SEPARATOR ', ') as generos_nomes,
+            GROUP_CONCAT(g.id SEPARATOR ',') as generos_ids
             FROM livros l
             LEFT JOIN livro_genero lg ON l.id = lg.livro_id
             LEFT JOIN generos g ON lg.genero_id = g.id
@@ -67,34 +70,41 @@ class Livro {
         }
     }
 
-    public function atualizarCompleto($id, $usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao) {
-        try {
-            $sql = "UPDATE livros SET 
-                        titulo = :titulo, 
-                        autor = :autor, 
-                        ano_publicacao = :ano, 
-                        status_leitura = :status, 
-                        descricao = :descricao, 
-                        imagem = :imagem,
-                        avaliacao = :avaliacao 
-                    WHERE id = :id AND usuario_id = :u_id";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(':titulo', $titulo);
-            $stmt->bindValue(':autor', $autor);
-            $stmt->bindValue(':ano', $ano);
-            $stmt->bindValue(':status', $status);
-            $stmt->bindValue(':descricao', $descricao);
-            $stmt->bindValue(':imagem', $imagem);
-            $stmt->bindValue(':avaliacao', $avaliacao);
-            $stmt->bindValue(':id', $id);
-            $stmt->bindValue(':u_id', $usuario_id);
-            
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            return false;
+    public function atualizarCompleto($id, $usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao, $generos = []) {
+    try {
+        $sql = "UPDATE livros SET 
+                    titulo = :titulo, 
+                    autor = :autor, 
+                    ano_publicacao = :ano, 
+                    status_leitura = :status, 
+                    descricao = :descricao, 
+                    imagem = :imagem,
+                    avaliacao = :avaliacao 
+                WHERE id = :id AND usuario_id = :u_id";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':titulo', $titulo);
+        $stmt->bindValue(':autor', $autor);
+        $stmt->bindValue(':ano', $ano);
+        $stmt->bindValue(':status', $status);
+        $stmt->bindValue(':descricao', $descricao);
+        $stmt->bindValue(':imagem', $imagem);
+        $stmt->bindValue(':avaliacao', $avaliacao);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':u_id', $usuario_id);
+        
+        $resultado = $stmt->execute();
+
+        // SE a atualização do livro deu certo, atualizamos os gêneros
+        if ($resultado) {
+            $this->vincularGeneros($id, $generos);
         }
+
+        return $resultado;
+    } catch (PDOException $e) {
+        return false;
     }
+}
 
     public function listarGeneros() {
     $sql = "SELECT * FROM generos ORDER BY nome ASC";
