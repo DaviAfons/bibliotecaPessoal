@@ -1,7 +1,8 @@
 CREATE DATABASE IF NOT EXISTS biblioteca;
 USE biblioteca;
 
-CREATE TABLE usuarios (
+-- Tabela de Utilizadores
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -11,6 +12,7 @@ CREATE TABLE usuarios (
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabela de Livros (Já com as colunas de imagem e avaliação integradas)
 CREATE TABLE IF NOT EXISTS livros (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -19,16 +21,22 @@ CREATE TABLE IF NOT EXISTS livros (
     ano_publicacao INT,
     status_leitura ENUM('lido', 'lendo', 'nao_lido') DEFAULT 'nao_lido',
     descricao TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    imagem VARCHAR(500) DEFAULT NULL, -- Aumentado para suportar URLs longas
+    avaliacao INT DEFAULT 0,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    INDEX (titulo), -- Melhora a velocidade da pesquisa por título
+    INDEX (autor)   -- Melhora a velocidade da pesquisa por autor
 );
 
+-- Tabela de Gêneros (Ex: Romance, Ficção, Terror)
 CREATE TABLE IF NOT EXISTS generos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- Tabela Relacional (Muitos para Muitos)
 CREATE TABLE IF NOT EXISTS livro_genero (
     livro_id INT NOT NULL,
     genero_id INT NOT NULL,
@@ -38,3 +46,7 @@ CREATE TABLE IF NOT EXISTS livro_genero (
     FOREIGN KEY (livro_id) REFERENCES livros(id) ON DELETE CASCADE,
     FOREIGN KEY (genero_id) REFERENCES generos(id) ON DELETE CASCADE
 );
+
+INSERT INTO generos (nome) VALUES ('Romance'), ('Ficção Científica'), ('Fantasia'), ('Terror'), ('Biografia'), ('História');
+
+DROP DATABASE IF EXISTS biblioteca;
