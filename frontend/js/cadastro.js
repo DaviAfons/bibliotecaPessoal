@@ -16,19 +16,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 2. Configurações Iniciais de Data
+    // Define a data máxima como hoje e a padrão como 18 anos atrás
     const hoje = new Date();
-    forms.dataNasc.max = hoje.toISOString().split('T')[0];
-    
-    const dataPadrao = new Date();
-    dataPadrao.setFullYear(hoje.getFullYear() - 18);
-    forms.dataNasc.value = dataPadrao.toISOString().split('T')[0];
+    if (forms.dataNasc) {
+        forms.dataNasc.max = hoje.toISOString().split('T')[0];
+        
+        const dataPadrao = new Date();
+        dataPadrao.setFullYear(hoje.getFullYear() - 18);
+        forms.dataNasc.value = dataPadrao.toISOString().split('T')[0];
+    }
 
-    // 3. Funções de Utilidade (Refatoradas)
+    // 3. Funções de Utilidade
     
     // Alternar visibilidade da senha
     window.togglePassword = (fieldId) => {
         const field = document.getElementById(fieldId);
-        const icon = field.nextElementSibling.querySelector('i');
+        const btn = field.nextElementSibling;
+        const icon = btn.querySelector('i');
         const isPassword = field.type === 'password';
         
         field.type = isPassword ? 'text' : 'password';
@@ -36,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.classList.toggle('fa-eye-slash', isPassword);
     };
 
-    // Força da Senha com Objeto de Configuração (Mais limpo que Switch)
+    // Força da Senha
     const updatePasswordStrength = () => {
         const pwd = forms.senha.value;
         let strength = 0;
@@ -54,32 +58,39 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const res = configs[strength];
-        ui.strengthBar.style.width = `${(strength / 4) * 100}%`;
-        ui.strengthBar.style.backgroundColor = res.color;
-        ui.strengthText.textContent = res.text;
-        ui.strengthText.style.color = res.color;
+        if (ui.strengthBar) {
+            ui.strengthBar.style.width = `${(strength / 4) * 100}%`;
+            ui.strengthBar.style.backgroundColor = res.color;
+            ui.strengthText.textContent = res.text;
+            ui.strengthText.style.color = res.color;
+        }
     };
 
-    // Validação de coincidência
+    // Validação de coincidência de senhas
     const checkPasswordMatch = () => {
         const match = forms.senha.value === forms.confirmar.value;
         const isEmpty = forms.confirmar.value === '';
         
-        ui.senhaMatch.textContent = isEmpty ? '' : (match ? '✓ As senhas coincidem' : '✗ As senhas não coincidem');
-        ui.senhaMatch.className = `validation-message ${match ? 'success' : 'error'}`;
+        if (ui.senhaMatch) {
+            ui.senhaMatch.textContent = isEmpty ? '' : (match ? '✓ As senhas coincidem' : '✗ As senhas não coincidem');
+            ui.senhaMatch.className = `validation-message ${match ? 'success' : 'error'}`;
+        }
+        
         forms.confirmar.classList.toggle('valid', match && !isEmpty);
         forms.confirmar.classList.toggle('invalid', !match && !isEmpty);
     };
 
-    // Gestão da Biografia
+    // Gestão da Biografia (Contador de caracteres)
     const updateBio = () => {
         if (forms.bio.value.length > 200) forms.bio.value = forms.bio.value.substring(0, 200);
         const count = forms.bio.value.length;
-        ui.charCount.textContent = `${count}/200 caracteres`;
-        ui.charCount.style.color = count > 190 ? '#c45a5a' : (count > 150 ? '#d2691e' : '#666666');
+        if (ui.charCount) {
+            ui.charCount.textContent = `${count}/200 caracteres`;
+            ui.charCount.style.color = count > 190 ? '#c45a5a' : (count > 150 ? '#d2691e' : '#666666');
+        }
     };
 
-    // 4. Submissão do Formulário
+    // 4. Submissão do Formulário (Integrado com o backend)
     window.cadastrar = async (event) => {
         event.preventDefault();
         
@@ -93,11 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
             termos: document.getElementById('termos').checked
         };
 
-        // Validações rápidas
+        // Validações de segurança antes de enviar ao servidor
         if (!dados.nome || !dados.email || !dados.senha) return showNotification('Preencha os campos obrigatórios', 'error');
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email)) return showNotification('Email inválido', 'error');
         if (dados.senha !== dados.confirmar) return showNotification('As senhas não coincidem', 'error');
-        if (!dados.termos) return showNotification('Aceite os termos', 'error');
+        if (!dados.termos) return showNotification('É necessário aceitar os termos de uso', 'error');
 
         try {
             const response = await fetch('../../backend/auth/cadastro.php', {
@@ -108,7 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.success) {
-                document.getElementById('successModal').classList.add('show');
+                // Exibe o modal de sucesso definido no CSS/HTML
+                const modal = document.getElementById('successModal');
+                if (modal) {
+                    modal.classList.add('show');
+                }
             } else {
                 showNotification(result.message, 'error');
             }
@@ -117,17 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 5. Event Listeners (Centralizados)
-    forms.senha.addEventListener('input', () => { updatePasswordStrength(); checkPasswordMatch(); });
-    forms.confirmar.addEventListener('input', checkPasswordMatch);
-    forms.bio.addEventListener('input', updateBio);
+    // 5. Event Listeners
+    if (forms.senha) forms.senha.addEventListener('input', () => { updatePasswordStrength(); checkPasswordMatch(); });
+    if (forms.confirmar) forms.confirmar.addEventListener('input', checkPasswordMatch);
+    if (forms.bio) forms.bio.addEventListener('input', updateBio);
     
-    // Iniciar notificações e estilos (executa uma vez)
-    injectStyles();
+    // Iniciar contagem da Bio no carregamento
     updateBio();
 });
 
-// Função de Notificação fora do DOMContentLoaded para ser global se necessário
+// Função de Notificação Global
 function showNotification(message, type = 'info') {
     const iconMap = { 
         success: 'check-circle', 
@@ -145,20 +159,17 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Pequeno delay para a animação de entrada funcionar
+    // Pequeno delay para a animação do CSS funcionar
     setTimeout(() => notification.classList.add('show'), 10);
     
-    // Remove a notificação após 4 segundos
+    // Remove automaticamente após 4 segundos
     setTimeout(() => {
         notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 400); // Espera a animação de saída terminar
+        setTimeout(() => notification.remove(), 400);
     }, 4000);
 }
 
-function injectStyles() {
-    if (document.querySelector('style[data-notifications]')) return;
-    const style = document.createElement('style');
-    style.setAttribute('data-notifications', '');
-    style.textContent = `.notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 10px; background: white; box-shadow: 0 5px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; z-index: 10000; transform: translateX(150%); transition: 0.4s; border-left: 4px solid #2c7be5; } .notification.show { transform: translateX(0); } .notification.success { border-left-color: #00a854; } .notification.error { border-left-color: #f5222d; }`; // ... (restante do CSS omitido por brevidade, mas mantido no seu original)
-    document.head.appendChild(style);
-}
+// Redirecionamento para Login
+window.redirectToLogin = () => {
+    window.location.href = '../../index.html';
+};
