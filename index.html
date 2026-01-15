@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Biblioteca Pessoal</title>
+    <link rel="stylesheet" href="./frontend/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <!-- Lado esquerdo - Decoração -->
+        <div class="login-decoration">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-book"></i>
+                    <h1>Biblioteca<br>Pessoal</h1>
+                </div>
+                <p class="slogan">Organize seu mundo literário</p>
+            </div>
+            
+            <div class="book-illustration">
+                <div class="book-stack">
+                    <div class="book book-1"></div>
+                    <div class="book book-2"></div>
+                    <div class="book book-3"></div>
+                </div>
+                <div class="quote">
+                    <i class="fas fa-quote-left"></i>
+                    <p>"A leitura é para a mente o que o exercício é para o corpo."</p>
+                    <span class="author">— Joseph Addison</span>
+                </div>
+            </div>
+            
+            <div class="features">
+                <h3><i class="fas fa-check-circle"></i> Benefícios</h3>
+                <ul>
+                    <li><i class="fas fa-book"></i> Catálogo pessoal ilimitado</li>
+                    <li><i class="fas fa-star"></i> Sistema de avaliação</li>
+                    <li><i class="fas fa-tags"></i> Organização por categorias</li>
+                    <li><i class="fas fa-chart-line"></i> Estatísticas de leitura</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Lado direito - Formulário -->
+        <div class="login-form-container">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h2>Bem-vindo de volta</h2>
+                    <p>Entre com sua conta para acessar sua biblioteca</p>
+                </div>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> E-mail
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="email" id="email" placeholder="seu.email@exemplo.com" required>
+                            <i class="fas fa-user-circle input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="senha">
+                            <i class="fas fa-lock"></i> Senha
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="password" id="senha" placeholder="Sua senha" required>
+                            <i class="fas fa-key input-icon"></i>
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="lembrar">
+                                <span>Lembrar-me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Entrar
+                        </button>
+                    </div>
+                    
+                    <div class="divider">
+                        <span>ou</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <p>Entre com suas redes sociais:</p>
+                        <div class="social-buttons">
+                            <button type="button" class="social-btn google">
+                                <i class="fab fa-google"></i> Google
+                            </button>
+                            <button type="button" class="social-btn facebook">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="signup-link">
+                        <p>Não tem uma conta? <a href="./frontend/html/cadastro.html">Cadastre-se aqui</a></p>
+                    </div>
+                </form>
+                
+                <div class="login-footer">
+                    <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+                    <p>&copy;Sofia Tresse Pires e Davi Afonso</p>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
+                        <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
+                        <a href="#"><i class="fas fa-file-contract"></i> Termos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script src="./frontend/js/index.js"></script>
+</body>
+</html>
