@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Biblioteca - Organização Literária</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/biblioteca.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-section" style="text-align: center; margin-bottom: 30px;">
+                <i class="fas fa-book-open" style="font-size: 2rem; color: var(--dourado);"></i>
+                <h2 style="font-size: 1.2rem; margin-top: 10px;">Minha Estante</h2>
+            </div>
+            <nav>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-home"></i> Início</a></li>
+                    <li style="margin-bottom: 15px;"><a href="#" onclick="abrirModal()" style="color: white; text-decoration: none;"><i class="fas fa-plus-circle"></i> Novo Livro</a></li>
+                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-bookmark"></i> Favoritos</a></li>
+                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-cog"></i> Configurações</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer" style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <a href="#" onclick="logout()" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="welcome">
+                    <h1>Olá, <span id="userName">Usuário</span>!</h1>
+                    <p>Como vai sua leitura hoje?</p>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="inputBusca" placeholder="Pesquisar por título ou autor...">
+                </div>
+            </header>
+
+            <section class="stats">
+                <div class="box">
+                    <i class="fas fa-check-double"></i>
+                    <div class="info">
+                        <h3>0</h3>
+                        <p>Livros Lidos</p>
+                    </div>
+                </div>
+                <div class="box">
+                    <i class="fas fa-book-reader"></i>
+                    <div class="info">
+                        <h3>0</h3>
+                        <p>Lendo Agora</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="book-grid"></section>
+        </main>
+    </div>
+
+    <div id="modalLivro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-book-medical"></i> Novo Livro</h3>
+                <span class="close" onclick="fecharModal()">&times;</span>
+            </div>
+            
+            <form id="formLivro">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" required placeholder="Ex: O Alquimista">
+                </div>
+                <div class="form-group">
+                    <label for="autor">Autor</label>
+                    <input type="text" id="autor" required placeholder="Ex: Paulo Coelho">
+                </div>
+
+                <div class="form-group">
+                    <label for="ano">Ano</label>
+                    <input type="number" id="ano">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="nao_lido">Não Lido</option>
+                        <option value="lendo">Lendo</option>
+                        <option value="lido">Lido</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="imagem">URL da Capa</label>
+                    <input type="url" id="imagem" placeholder="https://exemplo.com/capa.jpg">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="generos">Gêneros (Ctrl + Clique)</label>
+                    <select id="generos" name="generos[]" multiple class="generos-select-compact"></select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="descricao">Resumo / Descrição</label>
+                    <textarea id="descricao" rows="2" placeholder="Breve resumo da obra..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Avaliação</label>
+                    <div class="rating-input small-rating">
+                        <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+                        <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+                        <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+                        <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+                        <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="display: flex; align-items: flex-end;">
+                    <button type="submit" class="btn-save" style="margin: 0; padding: 10px;">Salvar Livro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/livros.js"></script>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = '../../index.html';
+        }
+    </script>
+</body>
+</html>
