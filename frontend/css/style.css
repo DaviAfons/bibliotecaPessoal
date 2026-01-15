@@ -529,17 +529,3 @@
         padding: 14px 16px 14px 45px;
     }
 }
-
-.status-select {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.status-nao_lido { background-color: #f0f0f0; color: #666; }
-.status-lendo { background-color: var(--dourado-suave); color: var(--dourado); }
-.status-lido { background-color: #e6f4ea; color: var(--sucesso); }
-
