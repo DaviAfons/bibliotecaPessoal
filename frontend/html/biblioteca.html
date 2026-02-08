@@ -6,130 +6,225 @@
     <title>Minha Biblioteca - Organização Literária</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/biblioteca.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/responsividade.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Pequeno ajuste para o botão de adicionar livro no topo */
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .btn-add-book {
+            background-color: var(--vinho);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .btn-add-book:hover {
+            background-color: var(--vinho-claro);
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="logo-section" style="text-align: center; margin-bottom: 30px;">
-                <i class="fas fa-book-open" style="font-size: 2rem; color: var(--dourado);"></i>
-                <h2 style="font-size: 1.2rem; margin-top: 10px;">Minha Estante</h2>
-            </div>
-            <nav>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-home"></i> Início</a></li>
-                    <li style="margin-bottom: 15px;"><a href="#" onclick="abrirModal()" style="color: white; text-decoration: none;"><i class="fas fa-plus-circle"></i> Novo Livro</a></li>
-                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-bookmark"></i> Favoritos</a></li>
-                    <li style="margin-bottom: 15px;"><a href="#" style="color: white; text-decoration: none;"><i class="fas fa-cog"></i> Configurações</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer" style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <a href="#" onclick="logout()" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            </div>
-        </aside>
 
-        <main class="main-content">
-            <header class="content-header">
-                <div class="welcome">
-                    <h1>Olá, <span id="userName">Usuário</span>!</h1>
-                    <p>Como vai sua leitura hoje?</p>
-                </div>
-                <div class="search-bar">
+    <nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fas fa-book"></i>
+        <span>Minha Biblioteca</span>
+    </div>
+
+    <button class="navbar-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-menu" id="navMenu">
+        <a href="favoritos.html" class="nav-item">
+            <i class="fas fa-heart"></i> <span class="link-text">Favoritos</span>
+        </a>
+        
+        <a href="perfil.html" class="nav-item user-profile-link" title="Editar Perfil">
+            <img src="../img/default-avatar.png" id="navAvatar" class="nav-avatar" alt="Avatar" onerror="this.src='https://ui-avatars.com/api/?name=User&background=efe7dd&color=5a1a1b'">
+            <span id="navNome">Carregando...</span>
+        </a>
+
+        <a href="../../index.html" onclick="logout()" class="nav-item" title="Sair">
+            <i class="fas fa-sign-out-alt"></i> <span class="mobile-only">Sair</span>
+        </a>
+    </div>
+</nav>
+
+    <div class="container" style="padding-top: 30px;">
+        
+        <header class="content-header" style="display: block;">
+            <div class="welcome" style="margin-bottom: 20px;">
+                <h1>Olá, <span id="userName">Leitor</span>!</h1>
+                <p>Como vai sua leitura hoje?</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-bar" style="flex: 1; margin-right: 15px;">
                     <i class="fas fa-search"></i>
                     <input type="text" id="inputBusca" placeholder="Pesquisar por título ou autor...">
                 </div>
-            </header>
+                
+                <button onclick="abrirModal()" class="btn-add-book">
+                    <i class="fas fa-plus-circle"></i> Novo Livro
+                </button>
+            </div>
+        </header>
 
-            <section class="stats">
-                <div class="box">
-                    <i class="fas fa-check-double"></i>
-                    <div class="info">
-                        <h3>0</h3>
-                        <p>Livros Lidos</p>
-                    </div>
+        <section class="stats">
+            <div class="box">
+                <i class="fas fa-check-double"></i>
+                <div class="info">
+                    <h3>0</h3>
+                    <p>Livros Lidos</p>
                 </div>
-                <div class="box">
-                    <i class="fas fa-book-reader"></i>
-                    <div class="info">
-                        <h3>0</h3>
-                        <p>Lendo Agora</p>
-                    </div>
+            </div>
+            <div class="box">
+                <i class="fas fa-book-reader"></i>
+                <div class="info">
+                    <h3>0</h3>
+                    <p>Lendo Agora</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="book-grid"></section>
-        </main>
+        <section class="book-grid"></section>
     </div>
 
     <div id="modalLivro" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-book-medical"></i> Novo Livro</h3>
-                <span class="close" onclick="fecharModal()">&times;</span>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-book-medical"></i> Novo Livro</h3>
+            <span class="close" onclick="fecharModal()">&times;</span>
+        </div>
+        
+        <form id="formLivro">
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" required placeholder="Ex: O Alquimista">
+            </div>
+            <div class="form-group">
+                <label for="autor">Autor</label>
+                <input type="text" id="autor" required placeholder="Ex: Paulo Coelho">
+            </div>
+
+            <div class="form-group">
+                <label for="ano">Ano</label>
+                <input type="number" id="ano">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status">
+                    <option value="nao_lido">Não Lido</option>
+                    <option value="lendo">Lendo</option>
+                    <option value="lido">Lido</option>
+                </select>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="inputFoto">Capa do Livro (Upload)</label>
+                <input type="file" id="inputFoto" accept="image/*">
+                
+                <input type="hidden" id="imagem">
+                
+                <img id="previewImagem" src="" style="display: none; max-width: 100px; margin-top: 10px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="generos">Gêneros (Ctrl + Clique)</label>
+                <select id="generos" name="generos[]" multiple class="generos-select-compact"></select>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="descricao">Resumo / Descrição</label>
+                <textarea id="descricao" rows="2" placeholder="Breve resumo da obra..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Avaliação</label>
+                <div class="rating-input small-rating">
+                    <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+                    <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+                    <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+                    <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+                    <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+                </div>
             </div>
             
-            <form id="formLivro">
-                <div class="form-group">
-                    <label for="titulo">Título</label>
-                    <input type="text" id="titulo" required placeholder="Ex: O Alquimista">
-                </div>
-                <div class="form-group">
-                    <label for="autor">Autor</label>
-                    <input type="text" id="autor" required placeholder="Ex: Paulo Coelho">
-                </div>
+            <div class="form-group" style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn-save" style="margin: 0; padding: 10px;">Salvar Livro</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-                <div class="form-group">
-                    <label for="ano">Ano</label>
-                    <input type="number" id="ano">
-                </div>
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status">
-                        <option value="nao_lido">Não Lido</option>
-                        <option value="lendo">Lendo</option>
-                        <option value="lido">Lido</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="imagem">URL da Capa</label>
-                    <input type="url" id="imagem" placeholder="https://exemplo.com/capa.jpg">
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="generos">Gêneros (Ctrl + Clique)</label>
-                    <select id="generos" name="generos[]" multiple class="generos-select-compact"></select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="descricao">Resumo / Descrição</label>
-                    <textarea id="descricao" rows="2" placeholder="Breve resumo da obra..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Avaliação</label>
-                    <div class="rating-input small-rating">
-                        <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
-                        <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
-                        <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
-                        <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
-                        <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
-                    </div>
-                </div>
-                
-                <div class="form-group" style="display: flex; align-items: flex-end;">
-                    <button type="submit" class="btn-save" style="margin: 0; padding: 10px;">Salvar Livro</button>
-                </div>
-            </form>
+    <footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <i class="fas fa-book-reader footer-logo"></i>
+            <p><i>"Um livro é um dispositivo para acender a imaginação."</i><b> — Alan Bennett</b></p>
+        </div>
+        
+        <div class="footer-info">
+            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
         </div>
     </div>
+</footer>
 
     <script src="../js/livros.js"></script>
     <script>
+        function toggleMenu() {
+        const menu = document.getElementById('navMenu');
+        // Adiciona ou remove a classe 'active' que criamos no CSS
+        menu.classList.toggle('active');
+        }
+        
+        // Função simples de logout
         function logout() {
             sessionStorage.clear();
+            // Opcional: chamar o backend para destruir a sessão PHP
             window.location.href = '../../index.html';
         }
+
+        document.getElementById('inputFoto').addEventListener('change', function(evento) {
+            const arquivo = evento.target.files[0]; // Pega o primeiro ficheiro
+            
+            if (arquivo) {
+                const leitor = new FileReader(); // Cria uma ferramenta de leitura
+
+                // Quando o leitor terminar de ler o ficheiro:
+                leitor.onload = function(e) {
+                    const resultadoBase64 = e.target.result;
+
+                    // 1. Mostra a imagem na pré-visualização
+                    const preview = document.getElementById('previewImagem');
+                    preview.src = resultadoBase64;
+                    preview.style.display = 'block';
+
+                    // 2. Guarda o código da imagem no input escondido
+                    // O teu ficheiro 'livros.js' vai ler daqui como se fosse um link normal
+                    document.getElementById('imagem').value = resultadoBase64;
+                }
+
+                // Começa a ler o ficheiro como uma URL de dados
+                leitor.readAsDataURL(arquivo);
+            }
+        });
     </script>
 </body>
 </html>
