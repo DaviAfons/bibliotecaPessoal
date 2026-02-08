@@ -1,0 +1,241 @@
+/* =====================
+   VARIÁVEIS FLUIDAS
+===================== */
+:root {
+    --font-size-body: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+    --font-size-h1: clamp(1.6rem, 1.4rem + 1.5vw, 2.8rem);
+    --spacing-container: clamp(16px, 5vw, 40px);
+}
+
+/* =====================
+   RESET BÁSICO
+===================== */
+html {
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-size: var(--font-size-body);
+}
+
+/* =====================
+   TIPOGRAFIA
+===================== */
+p,
+input,
+.form-group label,
+.step-text {
+    font-size: var(--font-size-body);
+}
+
+h1,
+.header-title h1,
+.form-header h2,
+.welcome h1 {
+    font-size: var(--font-size-h1);
+}
+
+/* =====================
+   CONTAINERS
+===================== */
+.favorites-container,
+.profile-container,
+.dashboard-container {
+    width: 100%;
+    padding-inline: var(--spacing-container);
+}
+
+/* Fallback (sem container query) */
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* =====================
+   CONTAINER QUERY
+===================== */
+@supports (container-type: inline-size) {
+    .favorites-container,
+    .profile-container,
+    .dashboard-container {
+        container-type: inline-size;
+        container-name: card-grid;
+    }
+
+    @container card-grid (max-width: 550px) {
+        .favorites-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .fav-card {
+            display: flex;
+            min-height: 140px;
+        }
+
+        .fav-capa {
+            width: 110px;
+            border-right: 1px solid var(--bege-medio);
+            border-bottom: none;
+        }
+
+        .fav-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+}
+
+/* =====================
+   MOBILE FIRST
+===================== */
+@media (max-width: 991px) {
+    .login-container,
+    .container {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .login-decoration {
+        display: flex;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .login-decoration .book-stack,
+    .login-decoration .features,
+    .login-decoration .slogan,
+    .login-decoration .quote {
+        display: none;
+    }
+
+    .login-form-container,
+    .main-content {
+        padding: 30px 20px;
+        border-radius: 20px 20px 0 0;
+        background: var(--branco);
+        box-shadow: 0 -5px 20px rgba(0,0,0,.05);
+    }
+}
+
+/* =====================
+   HEADER MOBILE
+===================== */
+@media (max-width: 650px) {
+    .header-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-bar,
+    .btn-add-book {
+        width: 100%;
+        height: 48px;
+        justify-content: center;
+    }
+}
+
+/* =====================
+   STEPS MOBILE
+===================== */
+@media (max-width: 480px) {
+    .progress-steps {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .step-text {
+        display: none;
+    }
+
+    .step.active .step-text {
+        display: block;
+        position: absolute;
+        top: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: .8rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    }
+}
+
+/* =====================
+   STATS
+===================== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+}
+
+@media (max-width: 480px) {
+    .stats .box {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* =====================
+   BOOK CARD
+===================== */
+.book-info h4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =====================
+   MODAL MOBILE
+===================== */
+@media (max-width: 768px) {
+    .modal-content {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        max-height: 85vh;
+        border-radius: 20px 20px 0 0;
+        overflow-y: auto;
+        animation: slideUp .3s ease;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+}
+
+/* =====================
+   TOUCH DEVICES
+===================== */
+@media (hover: none) {
+    button,
+    input,
+    select,
+    textarea {
+        min-height: 48px;
+    }
+}
+
+/* =====================
+   SAFE AREA (iOS)
+===================== */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .modal-content,
+    .main-footer,
+    .login-footer {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
