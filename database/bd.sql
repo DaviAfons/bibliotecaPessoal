@@ -49,4 +49,9 @@ CREATE TABLE IF NOT EXISTS livro_genero (
 
 INSERT INTO generos (nome) VALUES ('Romance'), ('Ficção Científica'), ('Fantasia'), ('Terror'), ('Biografia'), ('História');
 
+ALTER TABLE usuarios ADD COLUMN foto_perfil VARCHAR(255) DEFAULT NULL;
+
+ALTER TABLE livros ADD COLUMN favorito TINYINT(1) DEFAULT 0;
+
+ALTER TABLE livros MODIFY COLUMN imagem LONGTEXT;
 DROP DATABASE IF EXISTS biblioteca;
