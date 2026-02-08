@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Favoritos</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/favoritos.css">
+    <link rel="stylesheet" href="../css/responsividade.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="profile-page"> 
+    <nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fas fa-book"></i>
+        <span>Minha Biblioteca</span>
+    </div>
+
+    <button class="navbar-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-menu" id="navMenu">
+        <a href="perfil.html" class="nav-item user-profile-link" title="Editar Perfil">
+            <img src="../img/default-avatar.png" id="navAvatar" class="nav-avatar" alt="Avatar">
+            <span id="navNome" class="link-text">...</span>
+        </a>
+
+        <a href="../../index.html" onclick="logout()" class="nav-item" title="Sair">
+            <i class="fas fa-sign-out-alt"></i> <span class="mobile-only">Sair</span>
+        </a>
+    </div>
+</nav>
+    <div class="favorites-container">
+        
+        <header class="header-flex">
+            <div class="header-title">
+                <h1><i class="fas fa-heart" style="color: #e74c3c;"></i> Coleção Especial</h1>
+                <p>Os livros que marcaram sua jornada.</p>
+            </div>
+            
+            <div>
+                <a href="biblioteca.html" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Voltar à Biblioteca
+                </a>
+            </div>
+        </header>
+
+        <section class="favorites-grid">
+            </section>
+    </div>
+
+    <footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <i class="fas fa-book-reader footer-logo"></i>
+        </div>
+        
+        <div class="footer-info">
+            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
+        </div>
+    </div>
+</footer>
+
+    <script>
+    function toggleMenu() {
+        const menu = document.getElementById('navMenu');
+        menu.classList.toggle('active');
+    }
+
+    // Função logout caso não esteja no favoritos.js
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = '../../index.html';
+    }
+</script>
+
+    <script src="../js/favoritos.js"></script>
+    <script src="../js/livros.js"></script>
+</body>
+</html>
