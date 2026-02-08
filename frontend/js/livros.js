@@ -1,16 +1,69 @@
 document.addEventListener('DOMContentLoaded', () => {
     const bookGrid = document.querySelector('.book-grid');
-    const userNameSpan = document.getElementById('userName');
     const formLivro = document.getElementById('formLivro');
     const inputBusca = document.getElementById('inputBusca');
+    
+    // Elementos novos da imagem
+    const inputFoto = document.getElementById('inputFoto');
+    const previewImagem = document.getElementById('previewImagem');
+    const campoImagemHidden = document.getElementById('imagem');
 
-    // Recupera dados do usuário do sessionStorage
-    const usuario = JSON.parse(sessionStorage.getItem('usuario'));
-    if (usuario && userNameSpan) {
-        userNameSpan.textContent = usuario.nome;
+    // --- 0. LÓGICA DE UPLOAD DE IMAGEM (NOVO) ---
+    if (inputFoto) {
+        inputFoto.addEventListener('change', function(evento) {
+            const arquivo = evento.target.files[0];
+            
+            if (arquivo) {
+                // Verificação de tamanho (Opcional: avisa se for maior que 2MB)
+                if (arquivo.size > 2 * 1024 * 1024) {
+                    alert('Atenção: Imagens muito grandes podem deixar o sistema lento. Tente usar imagens menores.');
+                }
+
+                const leitor = new FileReader();
+                leitor.onload = function(e) {
+                    const resultadoBase64 = e.target.result;
+                    
+                    // Mostra preview
+                    if(previewImagem) {
+                        previewImagem.src = resultadoBase64;
+                        previewImagem.style.display = 'block';
+                    }
+                    
+                    // Preenche o campo oculto que será enviado ao PHP
+                    if(campoImagemHidden) {
+                        campoImagemHidden.value = resultadoBase64;
+                    }
+                }
+                leitor.readAsDataURL(arquivo);
+            }
+        });
     }
 
-    // --- FUNÇÕES DE CARREGAMENTO ---
+    // --- 1. CARREGAR DADOS DO USUÁRIO ---
+    const carregarUsuarioNavbar = async () => {
+        try {
+            const response = await fetch('../../backend/auth/get_perfil.php');
+            const data = await response.json();
+
+            if (data.success) {
+                const usuario = data.dados;
+                const navNome = document.getElementById('navNome');
+                const navAvatar = document.getElementById('navAvatar');
+                const userNameSpan = document.getElementById('userName');
+
+                if (navNome) navNome.textContent = usuario.nome.split(' ')[0];
+                if (userNameSpan) userNameSpan.textContent = usuario.nome;
+
+                if (navAvatar) {
+                    navAvatar.src = usuario.foto_perfil 
+                        ? '../' + usuario.foto_perfil 
+                        : `https://ui-avatars.com/api/?name=${usuario.nome}&background=efe7dd&color=5a1a1b`;
+                }
+            }
+        } catch (error) { console.error('Erro user:', error); }
+    };
+
+    // --- 2. CARREGAMENTO DE GÊNEROS ---
     const carregarGenerosNoSelect = async () => {
         try {
             const response = await fetch('../../backend/livros/listar_generos.php');
@@ -28,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.error(e); }
     };
 
+    // --- 3. ESTATÍSTICAS ---
     const carregarEstatisticas = async () => {
         try {
             const response = await fetch('../../backend/livros/estatisticas.php');
@@ -40,12 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.error(e); }
     };
 
+    // --- 4. LISTAGEM DE LIVROS ---
     const carregarLivros = async () => {
         try {
             const response = await fetch('../../backend/livros/listar.php');
             const data = await response.json();
+            
             if (data.success) {
-                window.meusLivros = data.livros; 
+                window.meusLivros = data.livros;
                 renderizarLivros(data.livros);
             }
         } catch (e) { console.error(e); }
@@ -53,8 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderizarLivros = (livros) => {
         if (!bookGrid) return;
+        
         if (!livros || livros.length === 0) {
-            bookGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Nenhum livro encontrado.</p>';
+            const mensagem = inputBusca && inputBusca.value 
+                ? 'Nenhum livro encontrado.' 
+                : 'Nenhum livro encontrado. Adicione um novo!';
+            bookGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--texto-claro);">${mensagem}</p>`;
             return;
         }
 
@@ -67,23 +127,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? livro.generos_nomes.split(', ').map(g => `<span class="genre-tag">${g}</span>`).join('')
                 : '';
 
+            const ehFavorito = livro.favorito == 1; 
+
+            // Se não tiver imagem, usa um placeholder
+            const imagemSrc = livro.imagem && livro.imagem.trim() !== '' 
+                ? livro.imagem 
+                : 'https://via.placeholder.com/150x220?text=Sem+Capa';
+
             return `
                 <div class="book-card" onclick="verDetalhes(${livro.id})">
                     <div class="capa-container">
-                        <img src="${livro.imagem || 'https://via.placeholder.com/150x220?text=Sem+Capa'}" alt="Capa">
+                        <img src="${imagemSrc}" alt="Capa">
                     </div>
                     <div class="book-info">
-                        <h4>${livro.titulo}</h4>
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <h4 style="margin-right: 10px;">${livro.titulo}</h4>
+                            <button class="btn-favorito ${ehFavorito ? 'ativo' : ''}" 
+                                    onclick="event.stopPropagation(); toggleFavorito(${livro.id})"
+                                    title="${ehFavorito ? 'Remover' : 'Favoritar'}">
+                                <i class="${ehFavorito ? 'fas' : 'far'} fa-heart"></i>
+                            </button>
+                        </div>
+
                         <p class="author-name">${livro.autor}</p>
                         <div class="genre-container">${tagsGeneros}</div>
                         <div style="color:var(--dourado)">${estrelasHTML}</div>
+                        
                         <div class="book-actions" onclick="event.stopPropagation()">
                             <select onchange="alterarStatus(${livro.id}, this.value)" class="status-select status-${livro.status_leitura}">
                                 <option value="nao_lido" ${livro.status_leitura === 'nao_lido' ? 'selected' : ''}>Não Lido</option>
                                 <option value="lendo" ${livro.status_leitura === 'lendo' ? 'selected' : ''}>Lendo</option>
                                 <option value="lido" ${livro.status_leitura === 'lido' ? 'selected' : ''}>Lido</option>
                             </select>
-                            <button onclick="removerLivro(${livro.id})" class="delete-btn">
+                            <button onclick="removerLivro(${livro.id})" class="delete-btn" title="Excluir">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -92,7 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     };
 
-    // --- SUBMISSÃO (SALVAR/EDITAR) ---
+    // --- 5. PESQUISA ---
+    if (inputBusca) {
+        inputBusca.addEventListener('input', (e) => {
+            const termo = e.target.value.toLowerCase();
+            if (window.meusLivros) {
+                const filtrados = window.meusLivros.filter(l => 
+                    l.titulo.toLowerCase().includes(termo) || l.autor.toLowerCase().includes(termo)
+                );
+                renderizarLivros(filtrados);
+            }
+        });
+    }
+
+    // --- SUBMISSÃO ---
     if (formLivro) {
         formLivro.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -101,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const radio = document.querySelector('input[name="rating"]:checked');
             const selectG = document.getElementById('generos');
+            const inputImg = document.getElementById('imagem');
 
             const dados = {
                 titulo: document.getElementById('titulo').value,
@@ -108,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ano: document.getElementById('ano').value,
                 status: document.getElementById('status').value,
                 descricao: document.getElementById('descricao').value,
-                imagem: document.getElementById('imagem').value,
+                imagem: inputImg ? inputImg.value : '', // Envia a string Base64
                 avaliacao: radio ? radio.value : 0,
                 generos: selectG ? Array.from(selectG.selectedOptions).map(o => o.value) : []
             };
@@ -121,82 +211,117 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-                const result = await response.json();
-                if (result.success) {
-                    fecharModal();
-                    location.reload(); 
-                } else {
-                    alert('Erro: ' + result.message);
+                // Verificamos o texto antes de fazer o parse para JSON para ajudar no debug
+                const textResult = await response.text();
+                
+                try {
+                    const result = JSON.parse(textResult);
+                    if (result.success) {
+                        fecharModal();
+                        location.reload(); 
+                    } else {
+                        alert('Erro do servidor: ' + result.message);
+                    }
+                } catch (jsonError) {
+                    console.error('Resposta inválida do servidor:', textResult);
+                    alert('Erro inesperado. Verifique a consola (F12) para detalhes.');
                 }
-            } catch (err) { alert('Erro no servidor'); }
+
+            } catch (err) { alert('Erro na conexão com o servidor'); }
         });
     }
 
     // Inicialização
+    carregarUsuarioNavbar();
     carregarGenerosNoSelect();
     carregarEstatisticas();
     carregarLivros();
 });
 
-// --- FUNÇÕES GLOBAIS (FORA DO DOMCONTENTLOADED) ---
+// --- FUNÇÕES GLOBAIS ---
+window.toggleFavorito = async (id) => {
+    try {
+        await fetch('../../backend/livros/favoritar.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id })
+        });
+        location.reload();
+    } catch (e) { console.error(e); }
+};
 
 window.abrirModal = () => {
-    document.getElementById('modalLivro').style.display = 'flex';
+    const modal = document.getElementById('modalLivro');
+    if(modal) modal.style.display = 'flex';
 };
 
 window.fecharModal = () => {
     const form = document.getElementById('formLivro');
-    form.reset();
-    delete form.dataset.editId;
-    document.getElementById('modalLivro').style.display = 'none';
+    const preview = document.getElementById('previewImagem');
+    const inputFoto = document.getElementById('inputFoto');
+    const hiddenImg = document.getElementById('imagem');
+
+    if(form) {
+        form.reset();
+        delete form.dataset.editId;
+        document.querySelector('.modal-header h3').innerHTML = '<i class="fas fa-book-medical"></i> Novo Livro';
+    }
+    
+    // Limpa a visualização e os campos de imagem
+    if(preview) {
+        preview.src = '';
+        preview.style.display = 'none';
+    }
+    if(inputFoto) inputFoto.value = '';
+    if(hiddenImg) hiddenImg.value = '';
+
+    const modal = document.getElementById('modalLivro');
+    if(modal) modal.style.display = 'none';
 };
 
 window.verDetalhes = (id) => {
-    // Busca o livro na lista carregada em memória
     const livro = window.meusLivros.find(l => l.id == id);
-    
     if (livro) {
-        // Muda o título do modal
         document.querySelector('.modal-header h3').innerHTML = '<i class="fas fa-edit"></i> Editar Livro';
-        
-        // Preenche os inputs de texto e selects simples
         document.getElementById('titulo').value = livro.titulo;
         document.getElementById('autor').value = livro.autor;
         document.getElementById('ano').value = livro.ano_publicacao || '';
         document.getElementById('status').value = livro.status_leitura;
         document.getElementById('descricao').value = livro.descricao || '';
-        document.getElementById('imagem').value = livro.imagem || '';
         
-        // Preenche a avaliação (Radio Buttons)
+        // --- Lógica de Imagem ao Editar ---
+        const hiddenImg = document.getElementById('imagem');
+        const preview = document.getElementById('previewImagem');
+        
+        if (hiddenImg) hiddenImg.value = livro.imagem || '';
+        
+        if (preview) {
+            if (livro.imagem && livro.imagem.trim() !== '') {
+                preview.src = livro.imagem;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+        // ---------------------------------
+        
         document.querySelectorAll('input[name="rating"]').forEach(radio => {
             radio.checked = (radio.value == (livro.avaliacao || 0));
         });
 
-        // --- LÓGICA DE GÊNEROS (NOVO) ---
         const selectGeneros = document.getElementById('generos');
-        
-        // 1. Limpa qualquer seleção anterior
-        Array.from(selectGeneros.options).forEach(opt => opt.selected = false);
-
-        // 2. Se o livro tiver IDs de gêneros (vindo do backend atualizado)
-        if (livro.generos_ids) {
-            // Converte a string "1,2,5" em array ['1', '2', '5']
-            // O String() garante que não quebre se vier apenas um número
-            const ids = String(livro.generos_ids).split(',');
-
-            // 3. Percorre as opções do select e marca as que coincidem com os IDs
-            Array.from(selectGeneros.options).forEach(opt => {
-                // Comparamos string com string para evitar erros de tipo
-                if (ids.includes(opt.value.toString())) {
-                    opt.selected = true;
-                }
-            });
+        if (selectGeneros) {
+            Array.from(selectGeneros.options).forEach(opt => opt.selected = false);
+            if (livro.generos_ids) {
+                const ids = String(livro.generos_ids).split(',');
+                Array.from(selectGeneros.options).forEach(opt => {
+                    if (ids.includes(opt.value.toString())) {
+                        opt.selected = true;
+                    }
+                });
+            }
         }
-        
-        // Armazena o ID do livro no formulário para saber que é uma edição
         document.getElementById('formLivro').dataset.editId = id;
-        
-        // Exibe o modal
         window.abrirModal();
     }
 };
@@ -206,9 +331,7 @@ window.removerLivro = async (id) => {
         try {
             const response = await fetch(`../../backend/livros/excluir.php?id=${id}`);
             const result = await response.json();
-            if(result.success) {
-                location.reload(); 
-            }
+            if(result.success) location.reload();
         } catch (e) { alert("Erro ao apagar"); }
     }
 };
@@ -221,8 +344,11 @@ window.alterarStatus = async (id, novoStatus) => {
             body: JSON.stringify({ id: id, status: novoStatus })
         });
         const result = await response.json();
-        if(result.success) {
-            location.reload(); 
-        }
+        if(result.success) location.reload();
     } catch (e) { console.error(e); }
+};
+
+window.logout = () => {
+    sessionStorage.clear();
+    window.location.href = '../../index.html';
 };
