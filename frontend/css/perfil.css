@@ -1,0 +1,123 @@
+/* Layout da Página de Perfil */
+.profile-page {
+    background-color: var(--bege-claro);
+    min-height: 100vh;
+}
+
+.profile-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.profile-card {
+    background: var(--branco);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px var(--sombra);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Faixa decorativa no topo do cartão */
+.profile-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, var(--vinho), var(--dourado), var(--vinho));
+}
+
+/* Área da Foto (Avatar) */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--branco);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Botão de câmara flutuante sobre a foto */
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: var(--dourado);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.avatar-upload-btn:hover {
+    transform: scale(1.1);
+    background: var(--dourado-claro);
+}
+
+/* Ocultar o input de arquivo real */
+#fotoInput {
+    display: none;
+}
+
+/* Área de Texto da Bio */
+textarea.form-control {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--bege-escuro);
+    border-radius: 10px;
+    background-color: var(--bege-claro);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+}
+
+textarea.form-control:focus {
+    outline: none;
+    border-color: var(--dourado);
+    background-color: var(--branco);
+}
+
+/* Mensagens de Feedback */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none; /* Escondido por padrão */
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
