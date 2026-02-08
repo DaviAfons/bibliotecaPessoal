@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Biblioteca Pessoal</title>
     <link rel="stylesheet" href="./frontend/css/style.css">
+    <link rel="stylesheet" href="./frontend/css/style2.css">
+    <link rel="stylesheet" href="./frontend/css/responsividade.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="login-page">
-    <div class="login-container">
-        <!-- Lado esquerdo - Decoração -->
-        <div class="login-decoration">
+    <div class="login-container d-flex flex-column flex-lg-row w-100 h-100 overflow-hidden">
+
+        <div class="login-decoration col-lg-6 d-none d-lg-block position-relative">
             <div class="logo-section">
                 <div class="logo">
                     <i class="fas fa-book"></i>
@@ -18,7 +22,7 @@
                 </div>
                 <p class="slogan">Organize seu mundo literário</p>
             </div>
-            
+
             <div class="book-illustration">
                 <div class="book-stack">
                     <div class="book book-1"></div>
@@ -31,7 +35,7 @@
                     <span class="author">— Joseph Addison</span>
                 </div>
             </div>
-            
+
             <div class="features">
                 <h3><i class="fas fa-check-circle"></i> Benefícios</h3>
                 <ul>
@@ -42,86 +46,74 @@
                 </ul>
             </div>
         </div>
-        
-        <!-- Lado direito - Formulário -->
-        <div class="login-form-container">
-            <div class="form-wrapper">
-                <div class="form-header">
+
+        <div class="login-form-container col-12 col-lg-6 d-flex align-items-center justify-content-center p-4">
+            <div class="form-wrapper w-100" style="max-width: 450px;">
+                <div class="form-header text-center mb-4">
                     <h2>Bem-vindo de volta</h2>
                     <p>Entre com sua conta para acessar sua biblioteca</p>
                 </div>
-                
+
                 <form id="loginForm" class="login-form">
-                    <div class="form-group">
-                        <label for="email">
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">
                             <i class="fas fa-envelope"></i> E-mail
                         </label>
-                        <div class="input-with-icon">
-                            <input type="email" id="email" placeholder="seu.email@exemplo.com" required>
-                            <i class="fas fa-user-circle input-icon"></i>
+                        <div class="input-with-icon position-relative">
+                            <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com"
+                                required>
+                            <i class="fas fa-user-circle input-icon position-absolute"
+                                style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="senha">
+
+                    <div class="form-group mb-3">
+                        <label for="senha" class="form-label">
                             <i class="fas fa-lock"></i> Senha
                         </label>
-                        <div class="input-with-icon">
-                            <input type="password" id="senha" placeholder="Sua senha" required>
-                            <i class="fas fa-key input-icon"></i>
-                            <button type="button" class="toggle-password" id="togglePassword">
+                        <div class="input-with-icon position-relative">
+                            <input type="password" id="senha" class="form-control" placeholder="Sua senha" required>
+                            <i class="fas fa-key input-icon position-absolute"
+                                style="top: 50%; right: 40px; transform: translateY(-50%);"></i>
+                            <button type="button" class="toggle-password btn btn-sm border-0 position-absolute"
+                                id="togglePassword"
+                                style="top: 50%; right: 5px; transform: translateY(-50%); background: transparent;">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
-                        <div class="form-options">
-                            <label class="remember-me">
+                        <div class="form-options d-flex justify-content-between align-items-center mt-2">
+                            <label class="remember-me d-flex align-items-center gap-2">
                                 <input type="checkbox" id="lembrar">
                                 <span>Lembrar-me</span>
                             </label>
-                            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                            <a href="#" class="forgot-password text-decoration-none">Esqueceu a senha?</a>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
+
+                    <div class="form-group mb-3">
                         <button type="submit" class="btn-login">
                             <i class="fas fa-sign-in-alt"></i> Entrar
                         </button>
                     </div>
-                    
-                    <div class="divider">
-                        <span>ou</span>
-                    </div>
-                    
-                    <div class="social-login">
-                        <p>Entre com suas redes sociais:</p>
-                        <div class="social-buttons">
-                            <button type="button" class="social-btn google">
-                                <i class="fab fa-google"></i> Google
-                            </button>
-                            <button type="button" class="social-btn facebook">
-                                <i class="fab fa-facebook-f"></i> Facebook
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="signup-link">
-                        <p>Não tem uma conta? <a href="./frontend/html/cadastro.html">Cadastre-se aqui</a></p>
+
+                    <div class="signup-link text-center mt-3">
+                        <p>Não tem uma conta? <a href="./frontend/html/cadastro.html"
+                                class="text-decoration-none fw-bold">Cadastre-se aqui</a></p>
                     </div>
                 </form>
-                
-                <div class="login-footer">
-                    <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
-                    <p>&copy;Sofia Tresse Pires e Davi Afonso</p>
-                    <div class="footer-links">
-                        <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
-                        <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
-                        <a href="#"><i class="fas fa-file-contract"></i> Termos</a>
+
+                <footer class="main-footer">
+                    <div class="footer-content">
+                        <div class="footer-info">
+                            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+                            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
+                        </div>
                     </div>
-                </div>
+                </footer>
             </div>
         </div>
     </div>
-    
-<script src="./frontend/js/index.js"></script>
+
+    <script src="./frontend/js/index.js"></script>
 </body>
 </html>
