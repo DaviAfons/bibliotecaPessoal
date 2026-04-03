@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueceu a Senha - Biblioteca Pessoal</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container d-flex align-items-center justify-content-center w-100 h-100">
+        <div class="form-wrapper" style="max-width: 450px; background: white; padding: 30px; border-radius: 10px;">
+            <div class="form-header text-center mb-4">
+                <h2>Recuperar Senha</h2>
+                <p>Digite seu e-mail para receber o link de recuperação</p>
+            </div>
+
+            <form id="formEsqueceuSenha">
+                <div class="form-group mb-3">
+                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> E-mail</label>
+                    <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com" required>
+                </div>
+                <button type="submit" class="btn-login w-100 mt-3">Enviar Link</button>
+            </form>
+
+            <div id="mensagem" class="mt-4 text-center" style="word-wrap: break-word;"></div>
+            
+            <div class="text-center mt-4">
+                <a href="../../index.html" class="text-decoration-none"><i class="fas fa-arrow-left"></i> Voltar ao Login</a>
+            </div>
+        </div>
+    </div>
+    <script src="../js/esqueceu_senha.js"></script>
+</body>
+</html>
