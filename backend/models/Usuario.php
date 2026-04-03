@@ -60,5 +60,35 @@ class Usuario {
 
         return $stmt->execute();
     }
+
+    public function salvarTokenRecuperacao($email, $token, $expiracao) {
+        $sql = "UPDATE usuarios SET token_recuperacao = :token, token_expiracao = :expiracao WHERE email = :email";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':expiracao', $expiracao);
+        $stmt->bindParam(':email', $email);
+        return $stmt->execute();
+    }
+
+    // NOVA FUNÇÃO: Busca o utilizador pelo token, verificando se não expirou
+    public function buscarPorToken($token) {
+        // Verifica se o token coincide e se a data de expiração é maior que a data atual
+        $sql = "SELECT * FROM usuarios WHERE token_recuperacao = :token AND token_expiracao > NOW()";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':token', $token);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // NOVA FUNÇÃO: Atualiza a senha e limpa o token de recuperação
+    public function redefinirSenha($id, $novaSenha) {
+        $senhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
+        // Atualiza a senha e anula o token para que não possa ser usado novamente
+        $sql = "UPDATE usuarios SET senha = :senha, token_recuperacao = NULL, token_expiracao = NULL WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':senha', $senhaHash);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 } 
 ?>
