@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS biblioteca;
+USE biblioteca;
 -- Tabela de Utilizadores
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
