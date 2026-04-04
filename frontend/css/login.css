@@ -1,0 +1,384 @@
+/* ==================================================
+   LOGIN.CSS - Específico para Login e Recuperação
+   ================================================== */
+
+.login-page {
+    background: linear-gradient(135deg, var(--bege-claro) 0%, var(--bege-medio) 100%);
+    display: flex;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ===== Lado Esquerdo - Decoração ===== */
+.login-decoration {
+    flex: 1;
+    background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
+    padding: 40px;
+    display: none;
+    /* Escondido no mobile */
+    flex-direction: column;
+    justify-content: center;
+    /* Centraliza tudo no meio */
+    align-items: center;
+    gap: 40px;
+    /* O SEGREDO: Garante 40px de distância INVIOLÁVEL entre Logo, Livros e Benefícios */
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .login-decoration {
+        display: flex;
+    }
+
+    .login-form-container {
+        flex: 1.2;
+    }
+}
+
+/* Ilustração dos Livros */
+.book-illustration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.book-stack {
+    position: relative;
+    width: 200px;
+    height: 260px;
+    margin: 0 auto 20px;
+}
+
+.book {
+    position: absolute;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-1 {
+    width: 160px;
+    height: 220px;
+    background: linear-gradient(135deg, #f3f8f6, #a8bbd4);
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    z-index: 1;
+    top: 20px;
+}
+
+.book-2 {
+    width: 170px;
+    height: 230px;
+    background: linear-gradient(45deg, #c2a879, #996330);
+    left: calc(50% + 15px);
+    transform: translateX(-50%);
+    z-index: 2;
+    top: 10px;
+}
+
+.book-3 {
+    width: 180px;
+    height: 240px;
+    background: linear-gradient(45deg, #458894, #3f6b9c);
+    left: calc(50% + 30px);
+    transform: translateX(-50%) rotate(5deg);
+    z-index: 3;
+    top: 0;
+}
+
+.logo-section {
+    z-index: 2;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.logo i {
+    font-size: 3rem;
+    color: var(--dourado);
+}
+
+.logo h1 {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 300;
+    margin: 0;
+    text-align: left;
+    line-height: 1.1;
+}
+
+.slogan {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.quote {
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.quote i {
+    font-size: 1.3rem;
+    color: var(--dourado);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.quote p {
+    font-style: italic;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.author {
+    font-size: 0.85rem;
+    color: var(--bege-escuro);
+}
+
+.features {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 25px;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 380px;
+}
+
+.features h3 {
+    color: var(--dourado);
+    margin-top: 0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.features li:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Lado Direito - Formulário ===== */
+.login-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: var(--branco);
+    width: 100%;
+}
+
+.form-wrapper {
+    max-width: 450px;
+    width: 100%;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-header h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 5px;
+    color: var(--vinho);
+}
+
+.form-header p {
+    color: var(--texto-claro);
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--vinho);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* A mágica do Posicionamento dos Ícones acontece aqui */
+.input-with-icon {
+    position: relative;
+    /* A tal da jaula */
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.form-control {
+    width: 100%;
+    padding: 16px 18px 16px 45px;
+    /* Espaço extra na esquerda (45px) para o ícone não pisar no texto */
+    border: 2px solid var(--bege-escuro);
+    border-radius: 10px;
+    background-color: var(--bege-claro);
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--dourado);
+    background-color: var(--branco);
+}
+
+/* Ícone da Esquerda (Email/Cadeado) */
+.input-icon {
+    position: absolute;
+    /* Flutua dentro do input */
+    left: 15px;
+    color: var(--dourado);
+}
+
+/* Ícone da Direita (Olho da Senha) */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--texto-claro);
+    padding: 0;
+    font-size: 1.1rem;
+}
+
+.toggle-password:hover {
+    color: var(--dourado);
+}
+
+/* Opções (Lembrar-me e Esqueci a Senha) */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    /* Empurra um para cada lado */
+    align-items: center;
+    margin-top: 10px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-claro);
+    font-size: 0.9rem;
+    font-weight: normal !important;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--vinho);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Botão Entrar */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--sombra-forte);
+}
+
+/* Link Cadastre-se */
+.signup-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.signup-link a {
+    color: var(--vinho);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade do Login */
+@media (max-width: 991px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-decoration {
+        display: flex;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-decoration .book-stack,
+    .login-decoration .features,
+    .login-decoration .slogan,
+    .login-decoration .quote {
+        display: none;
+    }
+
+    .login-form-container {
+        padding: 40px 20px;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, .05);
+        margin-top: -20px;
+        z-index: 10;
+    }
+}

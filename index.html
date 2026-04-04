@@ -5,16 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Biblioteca Pessoal</title>
-    <link rel="stylesheet" href="./frontend/css/style.css">
-    <link rel="stylesheet" href="./frontend/css/style2.css">
-    <link rel="stylesheet" href="./frontend/css/responsividade.css">
+    
+    <link rel="stylesheet" href="./frontend/css/global.css">
+    
+    <link rel="stylesheet" href="./frontend/css/login.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="login-page">
-    <div class="login-container d-flex flex-column flex-lg-row w-100 h-100 overflow-hidden">
+    <div class="login-container">
 
-        <div class="login-decoration col-lg-6 d-none d-lg-block position-relative">
+        <div class="login-decoration">
             <div class="logo-section">
                 <div class="logo">
                     <i class="fas fa-book"></i>
@@ -47,66 +49,60 @@
             </div>
         </div>
 
-        <div class="login-form-container col-12 col-lg-6 d-flex align-items-center justify-content-center p-4">
-            <div class="form-wrapper w-100" style="max-width: 450px;">
-                <div class="form-header text-center mb-4">
+        <div class="login-form-container">
+            <div class="form-wrapper">
+                <div class="form-header">
                     <h2>Bem-vindo de volta</h2>
                     <p>Entre com sua conta para acessar sua biblioteca</p>
                 </div>
 
                 <form id="loginForm" class="login-form">
-                    <div class="form-group mb-3">
-                        <label for="email" class="form-label">
+                    <div class="form-group">
+                        <label for="email">
                             <i class="fas fa-envelope"></i> E-mail
                         </label>
-                        <div class="input-with-icon position-relative">
-                            <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com"
-                                required>
-                            <i class="fas fa-user-circle input-icon position-absolute"
-                                style="top: 50%; right: 10px; transform: translateY(-50%);"></i>
+                        <div class="input-with-icon">
+                            <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com" required>
+                            <i class="fas fa-user-circle input-icon"></i>
                         </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="senha" class="form-label">
+                    <div class="form-group">
+                        <label for="senha">
                             <i class="fas fa-lock"></i> Senha
                         </label>
-                        <div class="input-with-icon position-relative">
+                        <div class="input-with-icon">
                             <input type="password" id="senha" class="form-control" placeholder="Sua senha" required>
-                            <i class="fas fa-key input-icon position-absolute"
-                                style="top: 50%; right: 40px; transform: translateY(-50%);"></i>
-                            <button type="button" class="toggle-password btn btn-sm border-0 position-absolute"
-                                id="togglePassword"
-                                style="top: 50%; right: 5px; transform: translateY(-50%); background: transparent;">
+                            <i class="fas fa-key input-icon"></i>
+                            <button type="button" class="toggle-password" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
-                        <div class="form-options d-flex justify-content-between align-items-center mt-2">
-                            <label class="remember-me d-flex align-items-center gap-2">
+                        <div class="form-options">
+                            <label class="remember-me">
                                 <input type="checkbox" id="lembrar">
                                 <span>Lembrar-me</span>
                             </label>
-                            <a href="./frontend/html/esqueceu_senha.html" class="forgot-password text-decoration-none">Esqueceu a senha?</a>                                </div>
+                            <a href="./frontend/html/esqueceu_senha.html" class="forgot-password">Esqueceu a senha?</a>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <button type="submit" class="btn-login">
                             <i class="fas fa-sign-in-alt"></i> Entrar
                         </button>
                     </div>
 
-                    <div class="signup-link text-center mt-3">
-                        <p>Não tem uma conta? <a href="./frontend/html/cadastro.html"
-                                class="text-decoration-none fw-bold">Cadastre-se aqui</a></p>
+                    <div class="signup-link">
+                        <p>Não tem uma conta? <a href="./frontend/html/cadastro.html">Cadastre-se aqui</a></p>
                     </div>
                 </form>
 
-                <footer class="main-footer">
-                    <div class="footer-content">
-                        <div class="footer-info">
-                            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
-                            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
-                        </div>
+                <footer class="main-footer" style="padding: 20px 0; background: transparent; border: none; color: var(--texto-claro);">
+                    <div class="footer-info">
+                        <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+                        <p class="credits" style="color: var(--vinho);"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
+                       
                     </div>
                 </footer>
             </div>
@@ -115,4 +111,5 @@
 
     <script src="./frontend/js/index.js"></script>
 </body>
+
 </html>

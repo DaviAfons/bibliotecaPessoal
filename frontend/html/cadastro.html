@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Biblioteca Pessoal</title>
-    <link rel="stylesheet" href="../css/style.css">
+    
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/cadastro.css">
-    <link rel="stylesheet" href="../css/responsividade.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <div class="container">
-      
-       
-
-        <!-- Conteúdo principal -->
+<body class="cadastro-page">
+    <div class="cadastro-wrapper">
         <div class="main-content">
-            <!-- Botão voltar para login -->
+            
             <a href="../../index.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Voltar para Login
             </a>
@@ -28,14 +24,14 @@
                 <h1>Criar Conta</h1>
                 <p class="subtitle">Cadastre-se para começar a construir sua biblioteca pessoal</p>
             </div>
-               <div class="quote-container">
-            <i class="fas fa-quote-left"></i>
-            <p class="quote-text">Uma biblioteca pessoal é um reflexo da alma de seu dono.</p>
-            <span class="author">— Umberto Eco</span>
-        </div>
+            
+            <div class="quote-container">
+                <i class="fas fa-quote-left"></i>
+                <p class="quote-text">Uma biblioteca pessoal é um reflexo da alma de seu dono.</p>
+                <span class="author">— Umberto Eco</span>
+            </div>
 
             <div class="box" id="cadastroBox">
-                <!-- Indicador de progresso -->
                 <div class="progress-steps">
                     <div class="step active">
                         <span class="step-number">1</span>
@@ -51,7 +47,6 @@
                     </div>
                 </div>
 
-                <!-- Formulário de cadastro -->
                 <form id="cadastroForm" onsubmit="cadastrar(event)">
                     <div class="form-row">
                         <div class="form-group">
@@ -127,23 +122,19 @@
                     </div>
                 </form>
             </div>
-
-            <footer class="main-footer">
-    <div class="footer-content">
-        <div class="footer-section">
-            <i class="fas fa-book-reader footer-logo"></i>
         </div>
-        
-        <div class="footer-info">
-            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
-            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
-        </div>
-
     </div>
-</footer>
 
-    <!-- Modal de sucesso -->
-    <div id="successModal" class="modal hidden">
+    <footer class="main-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div class="footer-info">
+                <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
+                <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="successModal" class="modal">
         <div class="modal-content">
             <div class="modal-icon">
                 <i class="fas fa-check-circle"></i>

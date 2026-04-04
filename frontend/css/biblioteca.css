@@ -3,7 +3,8 @@
     display: flex;
     min-height: 100vh;
     background-color: var(--bege-claro);
-    flex-direction: column; /* Ajuste para layout sem sidebar lateral */
+    flex-direction: column;
+    /* Ajuste para layout sem sidebar lateral */
 }
 
 /* CONTEÚDO PRINCIPAL */
@@ -80,7 +81,8 @@
     gap: 8px;
     font-weight: 600;
     transition: background 0.3s;
-    text-decoration: none; /* Caso seja um link */
+    text-decoration: none;
+    /* Caso seja um link */
 }
 
 .btn-add-book:hover {
@@ -178,7 +180,8 @@
     font-size: 1.2rem;
     cursor: pointer;
     transition: transform 0.2s;
-    color: #ccc; /* Cinzento quando não é favorito */
+    color: #ccc;
+    /* Cinzento quando não é favorito */
     padding: 5px;
     display: flex;
     align-items: center;
@@ -191,7 +194,8 @@
 }
 
 .btn-favorito.ativo {
-    color: #e74c3c; /* Vermelho quando é favorito */
+    color: #e74c3c;
+    /* Vermelho quando é favorito */
 }
 
 /* STATUS E AÇÕES */
@@ -199,7 +203,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto; /* Empurra para o fundo do card */
+    margin-top: auto;
+    /* Empurra para o fundo do card */
     padding-top: 15px;
     border-top: 1px solid var(--bege-claro);
 }
@@ -214,9 +219,20 @@
     transition: all 0.3s ease;
 }
 
-.status-nao_lido { background-color: #f0f0f0; color: #666; }
-.status-lendo { background-color: var(--dourado-suave); color: var(--dourado); }
-.status-lido { background-color: #e6f4ea; color: var(--sucesso); }
+.status-nao_lido {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+.status-lendo {
+    background-color: var(--dourado-suave);
+    color: var(--dourado);
+}
+
+.status-lido {
+    background-color: #e6f4ea;
+    color: var(--sucesso);
+}
 
 .delete-btn {
     background: none;
@@ -241,7 +257,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(3px);
@@ -255,7 +271,7 @@
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* CABEÇALHO DO MODAL */
@@ -307,8 +323,8 @@
     font-size: 0.9rem;
 }
 
-.form-group input, 
-.form-group select, 
+.form-group input,
+.form-group select,
 .form-group textarea {
     width: 100%;
     padding: 10px;
@@ -368,9 +384,9 @@
     transition: color 0.2s;
 }
 
-.rating-input input:checked ~ label,
+.rating-input input:checked~label,
 .rating-input label:hover,
-.rating-input label:hover ~ label {
+.rating-input label:hover~label {
     color: var(--dourado);
 }
 
@@ -411,13 +427,14 @@
 }
 
 .navbar {
-    background-color: var(--vinho); /* Usa a tua cor variável */
+    background-color: var(--vinho);
+    /* Usa a tua cor variável */
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     color: white;
 }
 
@@ -447,7 +464,8 @@
 }
 
 .nav-item:hover {
-    color: var(--dourado); /* Efeito hover */
+    color: var(--dourado);
+    /* Efeito hover */
 }
 
 .nav-avatar {
@@ -469,7 +487,8 @@
 }
 
 .mobile-only {
-    display: none; /* Texto "Sair" escondido no desktop, mostra só ícone */
+    display: none;
+    /* Texto "Sair" escondido no desktop, mostra só ícone */
 }
 
 /* ===== MEDIA QUERY (TELEMÓVEL) ===== */
@@ -479,25 +498,30 @@
     }
 
     .navbar-toggle {
-        display: block; /* Mostra o botão no telemóvel */
+        display: block;
+        /* Mostra o botão no telemóvel */
     }
 
     .mobile-only {
-        display: inline; /* Mostra o texto "Sair" no menu mobile */
+        display: inline;
+        /* Mostra o texto "Sair" no menu mobile */
     }
 
     /* Transformação do Menu em Lista Vertical */
     .navbar-menu {
-        display: none; /* Esconde o menu inicialmente */
+        display: none;
+        /* Esconde o menu inicialmente */
         position: absolute;
-        top: 100%; /* Fica logo abaixo da barra */
+        top: 100%;
+        /* Fica logo abaixo da barra */
         left: 0;
         width: 100%;
         background-color: var(--vinho);
-        flex-direction: column; /* Itens um abaixo do outro */
+        flex-direction: column;
+        /* Itens um abaixo do outro */
         padding: 20px 0;
         text-align: center;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
     }
 
@@ -511,9 +535,9 @@
         padding: 15px;
         width: 100%;
         justify-content: center;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .nav-item:last-child {
         border-bottom: none;
     }
@@ -521,6 +545,13 @@
 
 /* Animação suave de abertura */
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

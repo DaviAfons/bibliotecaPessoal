@@ -4,27 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redefinir Senha - Biblioteca Pessoal</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/style2.css">
+    
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-page">
-    <div class="login-container d-flex align-items-center justify-content-center w-100 h-100">
-        <div class="form-wrapper" style="max-width: 450px; background: white; padding: 30px; border-radius: 10px;">
-            <div class="form-header text-center mb-4">
-                <h2>Nova Senha</h2>
-                <p>Crie uma nova senha para sua conta</p>
-            </div>
-
-            <form id="formRedefinirSenha">
-                <div class="form-group mb-3">
-                    <label for="novaSenha" class="form-label">Nova Senha</label>
-                    <input type="password" id="novaSenha" class="form-control" placeholder="Digite a nova senha" required>
+    <div class="login-container">
+        
+        <div class="login-form-container" style="flex: 1; background: transparent;">
+            <div class="form-wrapper" style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px var(--sombra);">
+                
+                <div class="form-header">
+                    <h2>Nova Senha</h2>
+                    <p>Crie uma nova senha para sua conta</p>
                 </div>
-                <button type="submit" class="btn-login w-100 mt-3">Salvar Nova Senha</button>
-            </form>
 
-            <div id="mensagemRedefinir" class="mt-4 text-center"></div>
+                <form id="formRedefinirSenha">
+                    <div class="form-group">
+                        <label for="novaSenha"><i class="fas fa-lock"></i> Nova Senha</label>
+                        <div class="input-with-icon">
+                            <input type="password" id="novaSenha" class="form-control" placeholder="Digite a nova senha" required>
+                            <i class="fas fa-key input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-login" style="margin-top: 20px;">Salvar Nova Senha</button>
+                </form>
+
+                <div id="mensagemRedefinir" style="margin-top: 20px; text-align: center;"></div>
+                
+                <div class="signup-link" style="margin-top: 30px; border-top: none;">
+                    <a href="../../index.html" style="font-weight: 500;"><i class="fas fa-arrow-left"></i> Voltar ao Login</a>
+                </div>
+            </div>
         </div>
+        
     </div>
     <script src="../js/redefinir_senha.js"></script>
 </body>

@@ -70,12 +70,23 @@ async function salvarPerfil(e) {
         const msgDiv = document.getElementById('mensagem');
 
         msgDiv.style.display = 'block';
-        if (data.success) {
-            msgDiv.className = 'alert alert-success';
-            msgDiv.textContent = 'Perfil atualizado com sucesso!';
+       if (data.success) {
+            msgDiv.className = 'alert alert-success show';
+            // Usamos innerHTML para podermos colocar o ícone do Font Awesome
+            msgDiv.innerHTML = '<i class="fas fa-check-circle"></i> Perfil atualizado com sucesso!';
+            
+            // Esconde a mensagem suavemente após 3.5 segundos
+            setTimeout(() => {
+                msgDiv.classList.remove('show');
+            }, 3500);
+            
         } else {
-            msgDiv.className = 'alert alert-error';
-            msgDiv.textContent = data.message || 'Erro ao atualizar.';
+            msgDiv.className = 'alert alert-error show';
+            msgDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Erro ao atualizar.');
+            
+            setTimeout(() => {
+                msgDiv.classList.remove('show');
+            }, 4000); // Dá um pouco mais de tempo para ler erros
         }
 
     } catch (error) {

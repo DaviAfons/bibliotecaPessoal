@@ -1,40 +1,21 @@
-/* ===== VARIÁVEIS ===== */
-:root {
-    --vinho: #5a1a1b;
-    --vinho-claro: #7a2a2b;
-    --vinho-suave: rgba(90, 26, 27, 0.1);
-    --dourado: #a17d4d;
-    --dourado-claro: #b8945e;
-    --dourado-suave: rgba(161, 125, 77, 0.1);
-    --bege-claro: #f8f4f0;
-    --bege-medio: #efe7dd;
-    --bege-escuro: #e3d5c3;
-    --texto: #333333;
-    --texto-claro: #666666;
-    --branco: #ffffff;
-    --sombra: rgba(90, 26, 27, 0.08);
-    --sombra-forte: rgba(90, 26, 27, 0.15);
-    --sucesso: #2a7a2a;
-    --erro: #c45a5a;
-}
+/* ==================================================
+   CADASTRO.CSS - Específico para a página de Registo
+   ================================================== */
 
-/* ===== PÁGINA DE CADASTRO ===== */
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
+.cadastro-page {
     background: linear-gradient(135deg, var(--bege-claro) 0%, var(--bege-medio) 100%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.container {
-    display: flex;
     min-height: 100vh;
 }
 
+.cadastro-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    flex: 1;
+    /* Permite que o container empurre o footer para baixo */
+}
 
-
-/*CITACAO*/
+/* Citação */
 .quote-container {
     margin: 25px auto 30px;
     padding: 20px;
@@ -67,7 +48,6 @@ body {
     font-weight: 500;
 }
 
-/* Opcional: Adicionar linha decorativa acima da citação */
 .quote-container::before {
     content: "";
     position: absolute;
@@ -79,32 +59,14 @@ body {
     background: linear-gradient(90deg, transparent, var(--dourado), transparent);
 }
 
-/* ===== CONTEÚDO PRINCIPAL ===== */
+/* Conteúdo Principal */
 .main-content {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 100%;
-    background: var(--branco);
+    width: 100%;
+    max-width: 800px;
+    background: transparent;
+    padding: 20px 0;
 }
 
-@media (min-width: 992px) {
-    .main-content {
-        flex: 1.2;
-    }
-}
-
-@media (min-width: 768px) {
-    .main-content {
-        padding: 40px;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-}
-
-/* Botão voltar */
 .back-btn {
     display: inline-flex;
     align-items: center;
@@ -120,7 +82,6 @@ body {
     color: var(--vinho);
 }
 
-/* Cabeçalho */
 .header {
     text-align: center;
     margin-bottom: 40px;
@@ -132,7 +93,7 @@ body {
     margin-bottom: 20px;
 }
 
-h1 {
+.header h1 {
     color: var(--vinho);
     font-size: 2.5rem;
     margin-bottom: 15px;
@@ -141,7 +102,7 @@ h1 {
     font-weight: 300;
 }
 
-h1::after {
+.header h1::after {
     content: "";
     position: absolute;
     bottom: -10px;
@@ -160,7 +121,7 @@ h1::after {
     line-height: 1.5;
 }
 
-/* ===== CAIXAS DE CONTEÚDO ===== */
+/* Caixa do Formulário */
 .box {
     background: var(--branco);
     border-radius: 16px;
@@ -170,6 +131,7 @@ h1::after {
     margin-bottom: 30px;
     position: relative;
     overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .box::before {
@@ -182,7 +144,6 @@ h1::after {
     background: linear-gradient(to bottom, var(--vinho), var(--dourado));
 }
 
-/* ===== FORMULÁRIOS ===== */
 /* Indicador de progresso */
 .progress-steps {
     display: flex;
@@ -243,7 +204,7 @@ h1::after {
     font-weight: 600;
 }
 
-/* Layout do formulário */
+/* Formulários */
 .form-row {
     display: flex;
     flex-wrap: wrap;
@@ -254,7 +215,7 @@ h1::after {
     margin-bottom: 0;
 }
 
-.form-row > .form-group {
+.form-row>.form-group {
     flex: 1;
     min-width: 100%;
     padding: 0 10px;
@@ -262,14 +223,9 @@ h1::after {
 }
 
 @media (min-width: 768px) {
-    .form-row.duo > .form-group {
+    .form-row.duo>.form-group {
         min-width: 50%;
     }
-}
-
-/* Grupos de formulário */
-.form-group {
-    margin-bottom: 25px;
 }
 
 .form-group label {
@@ -293,10 +249,9 @@ h1::after {
     font-style: italic;
 }
 
-/* Campos de entrada */
-input,
-textarea,
-select {
+.box input,
+.box textarea,
+.box select {
     width: 100%;
     padding: 16px 18px;
     border: 2px solid var(--bege-escuro);
@@ -305,19 +260,19 @@ select {
     font-size: 1rem;
     color: var(--texto);
     transition: all 0.3s ease;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: inherit;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+.box input:focus,
+.box textarea:focus,
+.box select:focus {
     outline: none;
     border-color: var(--dourado);
     box-shadow: 0 0 0 4px var(--dourado-suave);
     background-color: var(--branco);
 }
 
-/* Container de senha */
+/* Senha e Indicadores */
 .password-container {
     position: relative;
 }
@@ -331,17 +286,12 @@ select:focus {
     border: none;
     color: var(--texto-claro);
     cursor: pointer;
-    width: auto;
-    padding: 0;
-    margin: 0;
 }
 
 .toggle-password:hover {
     color: var(--dourado);
-    background: none;
 }
 
-/* Indicador de força da senha */
 .password-strength {
     margin-top: 10px;
 }
@@ -364,7 +314,7 @@ select:focus {
     width: 20%;
     background-color: var(--erro);
     border-radius: 3px;
-    transition: width 0.3s, background-color 0.3s;
+    transition: 0.3s;
 }
 
 .strength-text {
@@ -380,7 +330,6 @@ select:focus {
     color: var(--erro);
 }
 
-/* Contador de caracteres */
 .char-count {
     text-align: right;
     font-size: 0.85rem;
@@ -388,7 +337,7 @@ select:focus {
     margin-top: 5px;
 }
 
-/* Termos e condições */
+/* Termos */
 .terms {
     display: flex;
     align-items: flex-start;
@@ -410,6 +359,7 @@ select:focus {
     font-weight: normal;
     color: var(--texto);
     line-height: 1.5;
+    display: inline;
 }
 
 .terms-link {
@@ -422,7 +372,7 @@ select:focus {
     text-decoration: underline;
 }
 
-/* ===== BOTÕES ===== */
+/* Botões */
 .btn-submit {
     width: 100%;
     padding: 18px;
@@ -432,13 +382,11 @@ select:focus {
     cursor: pointer;
     font-size: 1.05rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
     color: var(--branco);
     box-shadow: 0 4px 15px var(--sombra-forte);
@@ -447,16 +395,9 @@ select:focus {
 
 .btn-submit:hover {
     background: linear-gradient(135deg, var(--vinho-claro) 0%, var(--vinho) 100%);
-    box-shadow: 0 6px 20px var(--sombra-forte);
     transform: translateY(-3px);
 }
 
-.btn-submit:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 10px var(--sombra);
-}
-
-/* Link para login */
 .login-link {
     text-align: center;
     margin-top: 30px;
@@ -476,7 +417,7 @@ select:focus {
     text-decoration: underline;
 }
 
-/* ===== MODAL DE SUCESSO ===== */
+/* Modal Sucesso */
 .modal {
     position: fixed;
     top: 0;
@@ -554,41 +495,31 @@ select:focus {
     padding: 16px 30px;
     border: none;
     border-radius: 10px;
-    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: all 0.3s ease;
 }
 
-.btn-modal:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px var(--sombra-forte);
+.hidden {
+    display: none !important;
 }
 
-/* ===== RODAPÉ ===== */
-.footer {
-    text-align: center;
-    padding: 20px 0;
-    color: var(--texto-claro);
-    font-size: 0.9rem;
-    margin-top: auto;
-}
-
-/* ===== ANIMAÇÕES ===== */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.box {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* ===== ESTADOS DE VALIDAÇÃO ===== */
+/* Validações Dinâmicas */
 .validation-message {
     font-size: 0.85rem;
     margin-top: 5px;
@@ -612,52 +543,4 @@ input.valid {
 
 input.invalid {
     border-color: var(--erro);
-}
-
-/* ===== SISTEMA DE NOTIFICAÇÕES (DINÂMICO) ===== */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: 12px;
-    background: var(--branco);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 10000;
-    transform: translateX(150%);
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    border-left: 5px solid var(--dourado);
-}
-
-.notification.show {
-    transform: translateX(0);
-}
-
-.notification i {
-    font-size: 1.2rem;
-}
-
-/* Tipos de Notificação */
-.notification.success {
-    border-left-color: var(--sucesso);
-}
-.notification.success i { color: var(--sucesso); }
-
-.notification.error {
-    border-left-color: var(--erro);
-}
-.notification.error i { color: var(--erro); }
-
-.notification.info {
-    border-left-color: #2c7be5;
-}
-.notification.info i { color: #2c7be5; }
-
-.notification span {
-    color: var(--texto);
-    font-weight: 500;
-    font-size: 0.95rem;
 }

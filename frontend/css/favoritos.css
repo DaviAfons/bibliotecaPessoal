@@ -1,16 +1,13 @@
-/* =========================================
-   ESTILOS EXCLUSIVOS: MEUS FAVORITOS
-   ========================================= */
-
-/* Ajuste do Container Principal */
+/* ==================================================
+   FAVORITOS.CSS - Coleção Especial
+   ================================================== */
 .favorites-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
-    min-height: 60vh; /* Garante altura mesmo com poucos livros */
+    min-height: 60vh;
 }
 
-/* --- CABEÇALHO --- */
 .header-flex {
     display: flex;
     justify-content: space-between;
@@ -30,13 +27,17 @@
     font-weight: 300;
 }
 
+.header-title h1 i {
+    color: #e74c3c;
+    /* Coração vermelho que estava inline */
+}
+
 .header-title p {
     color: var(--texto-claro);
-    margin: 5px 0 0 50px; /* Alinha com o texto do h1 */
+    margin: 5px 0 0 50px;
     font-size: 1rem;
 }
 
-/* Botão Voltar Elegante */
 .btn-back {
     background-color: transparent;
     color: var(--vinho);
@@ -46,35 +47,31 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: all 0.3s;
 }
 
 .btn-back:hover {
     background-color: var(--vinho);
     color: white;
     transform: translateX(-3px);
-    box-shadow: 0 4px 10px rgba(90, 26, 27, 0.2);
 }
 
-/* --- GRID E CARDS DE FAVORITOS --- */
 .favorites-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 35px;
 }
 
-/* Card Especial para Favoritos */
 .fav-card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-    border-left: 5px solid var(--dourado); /* Detalhe VIP */
-    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--dourado);
+    transition: 0.3s;
 }
 
 .fav-card:hover {
@@ -86,7 +83,6 @@
     height: 320px;
     width: 100%;
     object-fit: cover;
-    border-bottom: 1px solid var(--bege-medio);
 }
 
 .fav-info {
@@ -97,35 +93,8 @@
     color: var(--vinho);
     margin: 0 0 5px 0;
     font-size: 1.1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.fav-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--bege-claro);
-}
-
-/* Botão de Coração (Sempre Ativo aqui) */
-.btn-heart-remove {
-    background: none;
-    border: none;
-    color: #e74c3c;
-    font-size: 1.3rem;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.btn-heart-remove:hover {
-    transform: scale(1.2);
-}
-
-/* --- ESTADO VAZIO (EMPTY STATE) --- */
 .empty-favorites {
     grid-column: 1 / -1;
     text-align: center;
@@ -139,9 +108,4 @@
     font-size: 4rem;
     color: var(--bege-escuro);
     margin-bottom: 20px;
-}
-
-.empty-favorites h3 {
-    color: var(--texto);
-    font-weight: 600;
 }

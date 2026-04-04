@@ -4,32 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esqueceu a Senha - Biblioteca Pessoal</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/style2.css">
+    
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-page">
-    <div class="login-container d-flex align-items-center justify-content-center w-100 h-100">
-        <div class="form-wrapper" style="max-width: 450px; background: white; padding: 30px; border-radius: 10px;">
-            <div class="form-header text-center mb-4">
-                <h2>Recuperar Senha</h2>
-                <p>Digite seu e-mail para receber o link de recuperação</p>
-            </div>
-
-            <form id="formEsqueceuSenha">
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> E-mail</label>
-                    <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com" required>
+    <div class="login-container">
+        
+        <div class="login-form-container" style="flex: 1; background: transparent;">
+            <div class="form-wrapper" style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px var(--sombra);">
+                
+                <div class="form-header">
+                    <h2>Recuperar Senha</h2>
+                    <p>Digite seu e-mail para receber o link de recuperação</p>
                 </div>
-                <button type="submit" class="btn-login w-100 mt-3">Enviar Link</button>
-            </form>
 
-            <div id="mensagem" class="mt-4 text-center" style="word-wrap: break-word;"></div>
-            
-            <div class="text-center mt-4">
-                <a href="../../index.html" class="text-decoration-none"><i class="fas fa-arrow-left"></i> Voltar ao Login</a>
+                <form id="formEsqueceuSenha">
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> E-mail</label>
+                        <div class="input-with-icon">
+                            <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com" required>
+                            <i class="fas fa-user-circle input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-login" style="margin-top: 20px;">Enviar Link</button>
+                </form>
+
+                <div id="mensagem" style="margin-top: 20px; text-align: center; word-wrap: break-word;"></div>
+                
+                <div class="signup-link" style="margin-top: 30px; border-top: none;">
+                    <a href="../../index.html" style="font-weight: 500;"><i class="fas fa-arrow-left"></i> Voltar ao Login</a>
+                </div>
             </div>
         </div>
+        
     </div>
     <script src="../js/esqueceu_senha.js"></script>
 </body>

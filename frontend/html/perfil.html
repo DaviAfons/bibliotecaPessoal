@@ -4,40 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Biblioteca Pessoal</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/style2.css">
+    
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/perfil.css">
-    <link rel="stylesheet" href="../css/responsividade.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="profile-page">
 
     <nav class="navbar">
-    <div class="navbar-brand">
-        <i class="fas fa-book-reader"></i>
-        <span>Minha Biblioteca</span>
-    </div>
+        <div class="navbar-brand">
+            <i class="fas fa-book-reader"></i>
+            <span>Minha Biblioteca</span>
+        </div>
 
-    <button class="navbar-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
-        <i class="fas fa-bars"></i>
-    </button>
+        <button class="navbar-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+        </button>
 
-    <div class="navbar-menu" id="navMenu">
-        <a href="biblioteca.html" class="nav-item">
-            <i class="fas fa-arrow-left"></i> 
-            <span class="link-text">Voltar aos Livros</span>
-        </a>
+        <div class="navbar-menu" id="navMenu">
+            <a href="biblioteca.html" class="nav-item">
+                <i class="fas fa-arrow-left"></i> 
+                <span class="link-text">Voltar aos Livros</span>
+            </a>
 
-        <a href="../../index.html" onclick="logout()" class="nav-item" title="Sair">
-            <i class="fas fa-sign-out-alt"></i> 
-            <span class="mobile-only">Sair</span>
-        </a>
-    </div>
-</nav>
+            <a href="../../index.html" onclick="logout()" class="nav-item" title="Sair">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span class="mobile-only">Sair</span>
+            </a>
+        </div>
+    </nav>
 
     <div class="profile-container">
         <div class="profile-card">
-            <div class="form-header">
+            <div class="form-header" style="text-align: center; margin-bottom: 30px;">
                 <h2>Editar Perfil</h2>
                 <p>Personalize como aparece na sua biblioteca</p>
             </div>
@@ -55,7 +54,7 @@
                         </label>
                         <input type="file" id="fotoInput" name="foto" accept="image/*">
                     </div>
-                    <p style="font-size: 0.9rem; color: var(--texto-claro);">Clique na câmara para alterar</p>
+                    <p>Clique na câmara para alterar</p>
                 </div>
 
                 <div class="form-group">
@@ -63,7 +62,7 @@
                         <i class="fas fa-user"></i> Nome Completo
                     </label>
                     <div class="input-with-icon">
-                        <input type="text" id="nome" name="nome" required>
+                        <input type="text" id="nome" name="nome" class="form-control" required>
                         <i class="fas fa-pen input-icon"></i>
                     </div>
                 </div>
@@ -86,31 +85,29 @@
     </div>
 
     <footer class="main-footer">
-    <div class="footer-content">
-        <div class="footer-section">
-            <i class="fas fa-book-reader footer-logo"></i>
-        </div>
-        
         <div class="footer-info">
-            <p>&copy; 2025 Biblioteca Pessoal. Todos os direitos reservados.</p>
-            <p class="credits"><b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b></p>
-        </div>
-    </div>
-</footer>
+    <p>&copy; 2026 Biblioteca Pessoal. Todos os direitos reservados.</p>
+    <p class="credits">
+        <b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b>
+        <br>
+        <a href="sobre.html" style="color: var(--dourado); text-decoration: none; display: inline-block; margin-top: 8px;">
+            <i class="fas fa-info-circle"></i> Conheça a nossa história
+        </a>
+    </p>
+</div>
+    </footer>
 
     <script>
-    // Menu Responsivo
-    function toggleMenu() {
-        const menu = document.getElementById('navMenu');
-        menu.classList.toggle('active');
-    }
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
 
-    // Função logout (para garantir que funciona aqui também)
-    function logout() {
-        sessionStorage.clear();
-        window.location.href = '../../index.html';
-    }
-</script>
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = '../../index.html';
+        }
+    </script>
 
     <script src="../js/perfil.js"></script>
 </body>
