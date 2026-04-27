@@ -1,15 +1,17 @@
 <?php
-// Define que a resposta será no formato JSON (ideal para o JavaScript ler depois)
 header('Content-Type: application/json');
 
-// Importa a conexão e o modelo
 require_once '../config/conexao.php';
 require_once '../models/Usuario.php';
 
-// Recebe os dados enviados pelo JavaScript
+require_once '../../vendor/autoload.php';
+
+// Importa as classes do PHPMailer para o escopo global
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 $dados = json_decode(file_get_contents("php://input"));
 
-// Verifica se o email foi enviado
 if (!isset($dados->email) || empty($dados->email)) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Por favor, informe o e-mail.']);
     exit;
@@ -17,39 +19,75 @@ if (!isset($dados->email) || empty($dados->email)) {
 
 $email = $dados->email;
 $usuarioModel = new Usuario($pdo);
-
-// 1. Verifica se o e-mail existe na base de dados
 $usuario = $usuarioModel->buscarPorEmail($email);
 
 if ($usuario) {
-    // 2. Gera um token (código) aleatório e seguro
-    $token = bin2hex(random_bytes(32)); // Exemplo: 3f8a9b...
-    
-    // 3. Define a expiração para daqui a 1 hora
+    $token = bin2hex(random_bytes(32));
     $expiracao = date('Y-m-d H:i:s', strtotime('+1 hour'));
     
-    // 4. Salva o token na base de dados
     if ($usuarioModel->salvarTokenRecuperacao($email, $token, $expiracao)) {
         
-        // 5. CRIA O LINK DE TESTE LOCAL
-        // Como estamos a testar localmente, vamos devolver o link na própria resposta.
-        // Nota: Em produção, enviarias este link por e-mail e devolverias apenas uma mensagem de "E-mail enviado".
         $linkRecuperacao = "http://localhost:3000/frontend/html/redefinir_senha.html?token=" . $token;
         
-        echo json_encode([
-            'sucesso' => true, 
-            'mensagem' => 'Se o e-mail existir, um link de recuperação foi gerado.',
-            'link_teste' => $linkRecuperacao // O JS vai ler isto e mostrar na tela!
-        ]);
+        // --- INÍCIO DA CONFIGURAÇÃO DO PHPMAILER ---
+        $mail = new PHPMailer(true);
+
+        try {
+            // Configurações do Servidor SMTP (Exemplo usando GMAIL)
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com'; 
+            $mail->SMTPAuth   = true;
+            
+            // COLOQUE SEU E-MAIL E SENHA DE APLICATIVO AQUI
+            $mail->Username   = 'seu_email@gmail.com'; 
+            $mail->Password   = 'sua_senha_de_app_aqui'; 
+            
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            // Remetente e Destinatário
+            $mail->setFrom('seu_email@gmail.com', 'Biblioteca Pessoal');
+            $mail->addAddress($email, $usuario['nome']);
+
+            // Conteúdo do E-mail
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->Subject = 'Recuperação de Senha - Biblioteca Pessoal';
+            
+            // Corpo do e-mail em HTML
+            $mail->Body = "
+                <h2>Olá, {$usuario['nome']}!</h2>
+                <p>Recebemos uma solicitação para redefinir a senha da sua conta na <b>Biblioteca Pessoal</b>.</p>
+                <p>Clique no link abaixo para criar uma nova senha:</p>
+                <p><a href='{$linkRecuperacao}' style='background-color: #722F37; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;'>Redefinir minha senha</a></p>
+                <p><small>Este link expira em 1 hora. Se você não solicitou isso, pode ignorar este e-mail em segurança.</small></p>
+            ";
+
+            // Corpo do e-mail em texto puro (para clientes de e-mail que não suportam HTML)
+            $mail->AltBody = "Olá, {$usuario['nome']}! Você solicitou a recuperação de senha. Copie e cole este link no seu navegador para redefinir: {$linkRecuperacao}";
+
+            $mail->send();
+            
+            echo json_encode([
+                'sucesso' => true, 
+                'mensagem' => 'Se o e-mail existir em nossa base, um link de recuperação foi enviado para a sua caixa de entrada.'
+            ]);
+            
+        } catch (Exception $e) {
+            // Em produção, não enviamos o erro real para a tela do usuário. 
+            // Mas para testes locais, isso vai nos ajudar a descobrir se a senha do e-mail está errada, etc.
+            echo json_encode(['sucesso' => false, 'mensagem' => "Erro ao enviar e-mail: {$mail->ErrorInfo}"]);
+        }
+        // --- FIM DA CONFIGURAÇÃO DO PHPMAILER ---
+
     } else {
-        echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao processar a solicitação.']);
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao processar a solicitação no banco de dados.']);
     }
 } else {
-    // Por segurança, damos a mesma mensagem de sucesso mesmo se o e-mail não existir.
-    // Isso evita que pessoas mal-intencionadas descubram quais e-mails estão registados.
+    // Mantemos a segurança de não revelar se o e-mail existe ou não
     echo json_encode([
         'sucesso' => true, 
-        'mensagem' => 'Se o e-mail existir, um link de recuperação foi gerado.'
+        'mensagem' => 'Se o e-mail existir em nossa base, um link de recuperação foi enviado para a sua caixa de entrada.'
     ]);
 }
 ?>
