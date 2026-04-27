@@ -1,12 +1,12 @@
 document.getElementById('formEsqueceuSenha').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Evita que a página recarregue
+    event.preventDefault();
     
     const email = document.getElementById('email').value;
     const mensagemDiv = document.getElementById('mensagem');
-    mensagemDiv.innerHTML = "Processando...";
+    mensagemDiv.innerHTML = "Enviando e-mail... Por favor, aguarde.";
+    mensagemDiv.style.color = "blue"; 
 
     try {
-        // Envia o email para o nosso ficheiro PHP
         const response = await fetch('../../backend/auth/solicitar_recuperacao.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -15,14 +15,9 @@ document.getElementById('formEsqueceuSenha').addEventListener('submit', async (e
         
         const data = await response.json();
 
-        // Se deu sucesso e gerou o link de teste (ambiente local)
-        if (data.sucesso && data.link_teste) {
-            mensagemDiv.innerHTML = `
-                <p style="color: green;">${data.mensagem}</p>
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 15px;">
-                    <strong>LINK DE TESTE LOCAL:</strong><br>
-                    <a href="${data.link_teste}">Clique aqui para redefinir a senha</a>
-                </div>`;
+        // Agora apenas verificamos se deu sucesso e mostramos a mensagem que o PHP enviou
+        if (data.sucesso) {
+            mensagemDiv.innerHTML = `<p style="color: green; font-weight: bold;">${data.mensagem}</p>`;
         } else {
             mensagemDiv.innerHTML = `<p style="color: red;">${data.mensagem}</p>`;
         }
