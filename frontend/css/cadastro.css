@@ -298,9 +298,8 @@
 
 .strength-bar {
     height: 6px;
-    background-color: var(--bege-escuro);
+    background-color: var(--bege-escuro); /* Esta é a trilha de fundo que fica sempre visível */
     border-radius: 3px;
-    overflow: hidden;
     margin-bottom: 5px;
     position: relative;
 }
@@ -311,10 +310,11 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 20%;
-    background-color: var(--erro);
+    /* O JS vai controlar estas duas variáveis: */
+    width: var(--bar-width, 0%); 
+    background-color: var(--bar-color, transparent);
     border-radius: 3px;
-    transition: 0.3s;
+    transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .strength-text {

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Biblioteca - Organização Literária</title>
-    
+
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/biblioteca.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="dashboard-page">
 
     <nav class="navbar">
@@ -17,7 +19,7 @@
             <span>Minha Biblioteca</span>
         </div>
 
-        <button class="navbar-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
+        <button class="navbar-toggle" id="navbarToggle" aria-label="Abrir menu">
             <i class="fas fa-bars"></i>
         </button>
 
@@ -25,33 +27,34 @@
             <a href="favoritos.html" class="nav-item">
                 <i class="fas fa-heart"></i> <span class="link-text">Favoritos</span>
             </a>
-            
+
             <a href="perfil.html" class="nav-item user-profile-link" title="Editar Perfil">
-                <img src="../img/default-avatar.png" id="navAvatar" class="nav-avatar" alt="Avatar" onerror="this.src='https://ui-avatars.com/api/?name=User&background=efe7dd&color=5a1a1b'">
+                <img src="../img/default-avatar.png" id="navAvatar" class="nav-avatar" alt="Avatar"
+                    onerror="this.src='https://ui-avatars.com/api/?name=User&background=efe7dd&color=5a1a1b'">
                 <span id="navNome">Carregando...</span>
             </a>
 
-            <a href="../../index.html" onclick="logout()" class="nav-item" title="Sair">
+            <a href="../../index.html" id="logoutLink" class="nav-item" title="Sair">
                 <i class="fas fa-sign-out-alt"></i> <span class="mobile-only">Sair</span>
             </a>
         </div>
     </nav>
 
     <div class="container">
-        
+
         <header class="content-header">
             <div class="welcome">
                 <h1>Olá, <span id="userName">Leitor</span>!</h1>
                 <p>Como vai sua leitura hoje?</p>
             </div>
-            
+
             <div class="header-actions">
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" id="inputBusca" placeholder="Pesquisar por título ou autor...">
                 </div>
-                
-                <button onclick="abrirModal()" class="btn-add-book">
+
+                <button id="btnNovoLivro" class="btn-add-book">
                     <i class="fas fa-plus-circle"></i> Novo Livro
                 </button>
             </div>
@@ -81,9 +84,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-book-medical"></i> Novo Livro</h3>
-                <span class="close" onclick="fecharModal()">&times;</span>
+                <span class="close" id="btnFecharModal">&times;</span>
             </div>
-            
+
             <form id="formLivro">
                 <div class="form-group">
                     <label for="titulo">Título</label>
@@ -95,7 +98,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="ano">Ano</label>
+                    <label for="ano">Ano da Leitura</label>
                     <input type="number" id="ano">
                 </div>
                 <div class="form-group">
@@ -115,13 +118,13 @@
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="generos">Gêneros (Ctrl + Clique)</label>
-                    <select id="generos" name="generos[]" multiple class="generos-select-compact"></select>
+                    <label>Gêneros</label>
+                    <div id="generos-checkboxes" class="generos-checkbox-grid"></div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="descricao">Resumo / Descrição</label>
-                    <textarea id="descricao" rows="2" placeholder="Breve resumo da obra..."></textarea>
+                    <label for="descricao">Resumo / Resenha</label>
+                    <textarea id="descricao" rows="2" placeholder="Breve resumo ou resenha da obra..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -134,7 +137,7 @@
                         <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <button type="submit" class="btn-save">Salvar Livro</button>
                 </div>
@@ -144,44 +147,19 @@
 
     <footer class="main-footer">
         <div class="footer-info">
-    <p>&copy; 2026 Biblioteca Pessoal. Todos os direitos reservados.</p>
-    <p class="credits">
-        <b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b>
-        <br>
-        <a href="sobre.html" style="color: var(--dourado); text-decoration: none; display: inline-block; margin-top: 8px;">
-            <i class="fas fa-info-circle"></i> Conheça a nossa história
-        </a>
-    </p>
-</div>
+            <p>&copy; 2026 Biblioteca Pessoal. Todos os direitos reservados.</p>
+            <p class="credits">
+                <b>&copy; Desenvolvido por Davi Afonso & Sofia Tresse Pires</b>
+                <br>
+                <a href="sobre.html"
+                    style="color: var(--dourado); text-decoration: none; display: inline-block; margin-top: 8px;">
+                    <i class="fas fa-info-circle"></i> Conheça a nossa história
+                </a>
+            </p>
+        </div>
     </footer>
 
     <script src="../js/livros.js"></script>
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
-        }
-        
-        function logout() {
-            sessionStorage.clear();
-            window.location.href = '../../index.html';
-        }
-
-        document.getElementById('inputFoto').addEventListener('change', function(evento) {
-            const arquivo = evento.target.files[0];
-            
-            if (arquivo) {
-                const leitor = new FileReader();
-                leitor.onload = function(e) {
-                    const resultadoBase64 = e.target.result;
-                    const preview = document.getElementById('previewImagem');
-                    preview.src = resultadoBase64;
-                    preview.style.display = 'block';
-                    document.getElementById('imagem').value = resultadoBase64;
-                }
-                leitor.readAsDataURL(arquivo);
-            }
-        });
-    </script>
 </body>
+
 </html>

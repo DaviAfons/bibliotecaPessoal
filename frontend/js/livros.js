@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookGrid = document.querySelector('.book-grid');
     const formLivro = document.getElementById('formLivro');
     const inputBusca = document.getElementById('inputBusca');
-    
+
     // Elementos novos da imagem
     const inputFoto = document.getElementById('inputFoto');
     const previewImagem = document.getElementById('previewImagem');
@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 0. LÓGICA DE UPLOAD DE IMAGEM (NOVO) ---
     if (inputFoto) {
-        inputFoto.addEventListener('change', function(evento) {
+        inputFoto.addEventListener('change', function (evento) {
             const arquivo = evento.target.files[0];
-            
+
             if (arquivo) {
                 // Verificação de tamanho (Opcional: avisa se for maior que 2MB)
                 if (arquivo.size > 2 * 1024 * 1024) {
@@ -20,17 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const leitor = new FileReader();
-                leitor.onload = function(e) {
+                leitor.onload = function (e) {
                     const resultadoBase64 = e.target.result;
-                    
+
                     // Mostra preview
-                    if(previewImagem) {
+                    if (previewImagem) {
                         previewImagem.src = resultadoBase64;
                         previewImagem.style.display = 'block';
                     }
-                    
+
                     // Preenche o campo oculto que será enviado ao PHP
-                    if(campoImagemHidden) {
+                    if (campoImagemHidden) {
                         campoImagemHidden.value = resultadoBase64;
                     }
                 }
@@ -55,27 +55,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userNameSpan) userNameSpan.textContent = usuario.nome;
 
                 if (navAvatar) {
-                    navAvatar.src = usuario.foto_perfil 
-                        ? '../' + usuario.foto_perfil 
+                    navAvatar.src = usuario.foto_perfil
+                        ? '../' + usuario.foto_perfil
                         : `https://ui-avatars.com/api/?name=${usuario.nome}&background=efe7dd&color=5a1a1b`;
                 }
             }
         } catch (error) { console.error('Erro user:', error); }
     };
 
-    // --- 2. CARREGAMENTO DE GÊNEROS ---
+    // --- 2. CARREGAMENTO DE GÊNEROS (checkboxes) ---
     const carregarGenerosNoSelect = async () => {
         try {
             const response = await fetch('../../backend/livros/listar_generos.php');
             const generos = await response.json();
-            const select = document.getElementById('generos'); 
-            if (select) {
-                select.innerHTML = '';
+            const container = document.getElementById('generos-checkboxes');
+            if (container) {
+                container.innerHTML = '';
                 generos.forEach(g => {
-                    const option = document.createElement('option');
-                    option.value = g.id;
-                    option.textContent = g.nome;
-                    select.appendChild(option);
+                    const label = document.createElement('label');
+                    label.className = 'genero-checkbox-label';
+                    label.innerHTML = `
+                        <input type="checkbox" name="generos[]" value="${g.id}">
+                        <span class="check-icon"><i class="fas fa-check" style="font-size:9px;"></i></span>
+                        <span>${g.nome}</span>`;
+                    container.appendChild(label);
                 });
             }
         } catch (e) { console.error(e); }
@@ -87,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('../../backend/livros/estatisticas.php');
             const stats = await response.json();
             const boxes = document.querySelectorAll('.stats .box h3');
-            if(boxes.length >= 2) {
+            if (boxes.length >= 2) {
                 boxes[0].textContent = stats.lidos || 0;
                 boxes[1].textContent = stats.lendo || 0;
             }
@@ -99,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('../../backend/livros/listar.php');
             const data = await response.json();
-            
+
             if (data.success) {
                 window.meusLivros = data.livros;
                 renderizarLivros(data.livros);
@@ -109,29 +112,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderizarLivros = (livros) => {
         if (!bookGrid) return;
-        
+
         if (!livros || livros.length === 0) {
-            const mensagem = inputBusca && inputBusca.value 
-                ? 'Nenhum livro encontrado.' 
+            const mensagem = inputBusca && inputBusca.value
+                ? 'Nenhum livro encontrado.'
                 : 'Nenhum livro encontrado. Adicione um novo!';
             bookGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--texto-claro);">${mensagem}</p>`;
             return;
         }
 
         bookGrid.innerHTML = livros.map(livro => {
-            const estrelasHTML = Array.from({ length: 5 }, (_, i) => 
+            const estrelasHTML = Array.from({ length: 5 }, (_, i) =>
                 `<i class="${i < (livro.avaliacao || 0) ? 'fas' : 'far'} fa-star"></i>`
             ).join('');
 
-            const tagsGeneros = livro.generos_nomes 
+            const tagsGeneros = livro.generos_nomes
                 ? livro.generos_nomes.split(', ').map(g => `<span class="genre-tag">${g}</span>`).join('')
                 : '';
 
-            const ehFavorito = livro.favorito == 1; 
+            const ehFavorito = livro.favorito == 1;
 
             // Se não tiver imagem, usa um placeholder
-            const imagemSrc = livro.imagem && livro.imagem.trim() !== '' 
-                ? livro.imagem 
+            const imagemSrc = livro.imagem && livro.imagem.trim() !== ''
+                ? livro.imagem
                 : 'https://via.placeholder.com/150x220?text=Sem+Capa';
 
             return `
@@ -173,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputBusca.addEventListener('input', (e) => {
             const termo = e.target.value.toLowerCase();
             if (window.meusLivros) {
-                const filtrados = window.meusLivros.filter(l => 
+                const filtrados = window.meusLivros.filter(l =>
                     l.titulo.toLowerCase().includes(termo) || l.autor.toLowerCase().includes(termo)
                 );
                 renderizarLivros(filtrados);
@@ -187,9 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const editId = formLivro.dataset.editId;
             const url = editId ? '../../backend/livros/editar.php' : '../../backend/livros/adicionar.php';
-            
+
             const radio = document.querySelector('input[name="rating"]:checked');
-            const selectG = document.getElementById('generos');
             const inputImg = document.getElementById('imagem');
 
             const dados = {
@@ -198,9 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ano: document.getElementById('ano').value,
                 status: document.getElementById('status').value,
                 descricao: document.getElementById('descricao').value,
-                imagem: inputImg ? inputImg.value : '', // Envia a string Base64
+                imagem: inputImg ? inputImg.value : '',
                 avaliacao: radio ? radio.value : 0,
-                generos: selectG ? Array.from(selectG.selectedOptions).map(o => o.value) : []
+                generos: Array.from(document.querySelectorAll('#generos-checkboxes input[type="checkbox"]:checked')).map(cb => cb.value)
             };
 
             if (editId) dados.id = editId;
@@ -213,12 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 // Verificamos o texto antes de fazer o parse para JSON para ajudar no debug
                 const textResult = await response.text();
-                
+
                 try {
                     const result = JSON.parse(textResult);
                     if (result.success) {
                         fecharModal();
-                        location.reload(); 
+                        location.reload();
                     } else {
                         alert('Erro do servidor: ' + result.message);
                     }
@@ -236,6 +238,33 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarGenerosNoSelect();
     carregarEstatisticas();
     carregarLivros();
+
+    // --- LISTENERS DE UI (antes inline no HTML) ---
+    const navbarToggle = document.getElementById('navbarToggle');
+    if (navbarToggle) {
+        navbarToggle.addEventListener('click', () => {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+    }
+
+    const logoutLink = document.getElementById('logoutLink');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.clear();
+            window.location.href = '../../index.html';
+        });
+    }
+
+    const btnNovoLivro = document.getElementById('btnNovoLivro');
+    if (btnNovoLivro) {
+        btnNovoLivro.addEventListener('click', () => window.abrirModal());
+    }
+
+    const btnFecharModal = document.getElementById('btnFecharModal');
+    if (btnFecharModal) {
+        btnFecharModal.addEventListener('click', () => window.fecharModal());
+    }
 });
 
 // --- FUNÇÕES GLOBAIS ---
@@ -252,7 +281,7 @@ window.toggleFavorito = async (id) => {
 
 window.abrirModal = () => {
     const modal = document.getElementById('modalLivro');
-    if(modal) modal.style.display = 'flex';
+    if (modal) modal.style.display = 'flex';
 };
 
 window.fecharModal = () => {
@@ -261,22 +290,24 @@ window.fecharModal = () => {
     const inputFoto = document.getElementById('inputFoto');
     const hiddenImg = document.getElementById('imagem');
 
-    if(form) {
+    if (form) {
         form.reset();
         delete form.dataset.editId;
         document.querySelector('.modal-header h3').innerHTML = '<i class="fas fa-book-medical"></i> Novo Livro';
+        // Desmarca todos os gêneros
+        document.querySelectorAll('#generos-checkboxes input[type="checkbox"]').forEach(cb => cb.checked = false);
     }
-    
+
     // Limpa a visualização e os campos de imagem
-    if(preview) {
+    if (preview) {
         preview.src = '';
         preview.style.display = 'none';
     }
-    if(inputFoto) inputFoto.value = '';
-    if(hiddenImg) hiddenImg.value = '';
+    if (inputFoto) inputFoto.value = '';
+    if (hiddenImg) hiddenImg.value = '';
 
     const modal = document.getElementById('modalLivro');
-    if(modal) modal.style.display = 'none';
+    if (modal) modal.style.display = 'none';
 };
 
 window.verDetalhes = (id) => {
@@ -288,13 +319,13 @@ window.verDetalhes = (id) => {
         document.getElementById('ano').value = livro.ano_publicacao || '';
         document.getElementById('status').value = livro.status_leitura;
         document.getElementById('descricao').value = livro.descricao || '';
-        
+
         // --- Lógica de Imagem ao Editar ---
         const hiddenImg = document.getElementById('imagem');
         const preview = document.getElementById('previewImagem');
-        
+
         if (hiddenImg) hiddenImg.value = livro.imagem || '';
-        
+
         if (preview) {
             if (livro.imagem && livro.imagem.trim() !== '') {
                 preview.src = livro.imagem;
@@ -304,20 +335,19 @@ window.verDetalhes = (id) => {
             }
         }
         // ---------------------------------
-        
+
         document.querySelectorAll('input[name="rating"]').forEach(radio => {
             radio.checked = (radio.value == (livro.avaliacao || 0));
         });
 
-        const selectGeneros = document.getElementById('generos');
+        const selectGeneros = document.getElementById('generos-checkboxes');
         if (selectGeneros) {
-            Array.from(selectGeneros.options).forEach(opt => opt.selected = false);
+            // Desmarca todos primeiro
+            selectGeneros.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             if (livro.generos_ids) {
                 const ids = String(livro.generos_ids).split(',');
-                Array.from(selectGeneros.options).forEach(opt => {
-                    if (ids.includes(opt.value.toString())) {
-                        opt.selected = true;
-                    }
+                selectGeneros.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    if (ids.includes(cb.value.toString())) cb.checked = true;
                 });
             }
         }
@@ -331,7 +361,7 @@ window.removerLivro = async (id) => {
         try {
             const response = await fetch(`../../backend/livros/excluir.php?id=${id}`);
             const result = await response.json();
-            if(result.success) location.reload();
+            if (result.success) location.reload();
         } catch (e) { alert("Erro ao apagar"); }
     }
 };
@@ -344,11 +374,6 @@ window.alterarStatus = async (id, novoStatus) => {
             body: JSON.stringify({ id: id, status: novoStatus })
         });
         const result = await response.json();
-        if(result.success) location.reload();
+        if (result.success) location.reload();
     } catch (e) { console.error(e); }
-};
-
-window.logout = () => {
-    sessionStorage.clear();
-    window.location.href = '../../index.html';
 };

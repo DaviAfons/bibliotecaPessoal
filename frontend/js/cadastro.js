@@ -59,8 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const res = configs[strength];
         if (ui.strengthBar) {
-            ui.strengthBar.style.width = `${(strength / 4) * 100}%`;
-            ui.strengthBar.style.backgroundColor = res.color;
+            // Envia os valores dinâmicos para as variáveis CSS criadas acima
+            ui.strengthBar.style.setProperty('--bar-width', `${(strength / 4) * 100}%`);
+            ui.strengthBar.style.setProperty('--bar-color', res.color);
+            
             ui.strengthText.textContent = res.text;
             ui.strengthText.style.color = res.color;
         }
