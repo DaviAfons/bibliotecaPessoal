@@ -3,7 +3,9 @@ document.getElementById('formEsqueceuSenha').addEventListener('submit', async (e
     
     const email = document.getElementById('email').value;
     const mensagemDiv = document.getElementById('mensagem');
-    mensagemDiv.innerHTML = "Enviando e-mail... Por favor, aguarde.";
+    
+    // Feedback visual indicando processamento
+    mensagemDiv.innerHTML = "Processando solicitação... Por favor, aguarde.";
     mensagemDiv.style.color = "blue"; 
 
     try {
@@ -15,9 +17,22 @@ document.getElementById('formEsqueceuSenha').addEventListener('submit', async (e
         
         const data = await response.json();
 
-        // Agora apenas verificamos se deu sucesso e mostramos a mensagem que o PHP enviou
         if (data.sucesso) {
-            mensagemDiv.innerHTML = `<p style="color: green; font-weight: bold;">${data.mensagem}</p>`;
+            let htmlMensagem = `<p style="color: green; font-weight: bold;">${data.mensagem}</p>`;
+            
+            // Renderiza o botão se o modo de teste (link_dev) estiver ativo
+            if (data.link_dev) {
+                htmlMensagem += `
+                    <div style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px;">
+                        <p style="color: #333; margin-bottom: 10px; font-size: 0.9em;">(Modo Teste) Clique abaixo para continuar:</p>
+                        <a href="${data.link_dev}" style="background-color: #722F37; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                            Ir para Redefinição de Senha
+                        </a>
+                    </div>
+                `;
+            }
+            
+            mensagemDiv.innerHTML = htmlMensagem;
         } else {
             mensagemDiv.innerHTML = `<p style="color: red;">${data.mensagem}</p>`;
         }
