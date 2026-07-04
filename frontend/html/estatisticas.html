@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas — Minha Biblioteca</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/estatisticas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="stats-page">
+
+    <!-- Fix navbar bug: position:relative garante que o menu mobile
+         (position:absolute; top:68px) se posicione relativo à navbar -->
+    <nav class="navbar" style="position:relative;">
+        <div class="navbar-brand">
+            <i class="fas fa-book"></i>
+            <span>Minha Biblioteca</span>
+        </div>
+
+        <button class="navbar-toggle" id="navbarToggle" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="navbar-menu" id="navMenu">
+            <a href="biblioteca.html" class="nav-item">
+                <i class="fas fa-arrow-left"></i>
+                <span class="link-text">Biblioteca</span>
+            </a>
+            <a href="favoritos.html" class="nav-item">
+                <i class="fas fa-heart"></i>
+                <span class="link-text">Favoritos</span>
+            </a>
+            <a href="perfil.html" class="nav-item user-profile-link">
+                <img src="../img/default-avatar.png" id="navAvatar" class="nav-avatar" alt="Avatar"
+                     onerror="this.src='https://ui-avatars.com/api/?name=User&background=efe7dd&color=5a1a1b'">
+                <span id="navNome">...</span>
+            </a>
+            <a href="../../index.html" id="logoutLink" class="nav-item" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="mobile-only">Sair</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="stats-container">
+
+        <header class="stats-header">
+            <div>
+                <h1><i class="fas fa-chart-bar"></i> Estatísticas</h1>
+                <p>Um panorama da sua jornada literária.</p>
+            </div>
+            <a href="biblioteca.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </header>
+
+        <!-- ── Números resumo ── -->
+        <section class="summary-row" id="summaryRow">
+            <div class="summary-card skeleton" id="sc-total">
+                <i class="fas fa-books"></i>
+                <div class="sc-info"><span class="sc-num">—</span><span class="sc-label">Total</span></div>
+            </div>
+            <div class="summary-card skeleton" id="sc-lidos">
+                <i class="fas fa-check-double"></i>
+                <div class="sc-info"><span class="sc-num">—</span><span class="sc-label">Lidos</span></div>
+            </div>
+            <div class="summary-card skeleton" id="sc-lendo">
+                <i class="fas fa-book-reader"></i>
+                <div class="sc-info"><span class="sc-num">—</span><span class="sc-label">Lendo</span></div>
+            </div>
+            <div class="summary-card skeleton" id="sc-fila">
+                <i class="fas fa-clock"></i>
+                <div class="sc-info"><span class="sc-num">—</span><span class="sc-label">Na fila</span></div>
+            </div>
+        </section>
+
+        <!-- ── Gráficos ── -->
+        <div class="charts-grid">
+
+            <!-- Donut: status -->
+            <div class="chart-card" id="cardDonut">
+                <div class="chart-card-header">
+                    <h2><i class="fas fa-circle-notch"></i> Distribuição por Status</h2>
+                    <p>Como seus livros estão divididos</p>
+                </div>
+                <div class="donut-wrapper">
+                    <svg id="svgDonut" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="donut-track" cx="100" cy="100" r="72"/>
+                        <circle class="donut-seg seg-lido"     id="segLido"    cx="100" cy="100" r="72"/>
+                        <circle class="donut-seg seg-lendo"    id="segLendo"   cx="100" cy="100" r="72"/>
+                        <circle class="donut-seg seg-nao_lido" id="segNaoLido" cx="100" cy="100" r="72"/>
+                        <text id="donutCenter" x="100" y="95"  text-anchor="middle" class="donut-num">—</text>
+                        <text                  x="100" y="115" text-anchor="middle" class="donut-sub">livros</text>
+                    </svg>
+                    <div class="donut-legend" id="donutLegend"></div>
+                </div>
+            </div>
+
+            <!-- Barras: gêneros -->
+            <div class="chart-card" id="cardBarras">
+                <div class="chart-card-header">
+                    <h2><i class="fas fa-layer-group"></i> Livros por Gênero</h2>
+                    <p>Seus gêneros mais lidos</p>
+                </div>
+                <div class="bars-wrapper" id="barsWrapper">
+                    <!-- gerado via JS -->
+                </div>
+            </div>
+
+            <!-- Barras: avaliação média por gênero -->
+            <div class="chart-card chart-card--wide" id="cardAval">
+                <div class="chart-card-header">
+                    <h2><i class="fas fa-star-half-alt"></i> Avaliação Média por Gênero</h2>
+                    <p>Média das estrelas nos livros avaliados</p>
+                </div>
+                <div class="aval-wrapper" id="avalWrapper">
+                    <!-- gerado via JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-info">
+            <p>&copy; 2026 Biblioteca Pessoal. Todos os direitos reservados.</p>
+            <p class="credits">
+                <b>&copy; Desenvolvido por Davi Afonso &amp; Sofia Tresse Pires</b>
+            </p>
+        </div>
+    </footer>
+
+    <script src="../js/estatisticas.js"></script>
+</body>
+</html>
