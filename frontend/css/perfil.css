@@ -1,54 +1,165 @@
 /* ==================================================
-   PERFIL.CSS - Edição de Conta
+   PERFIL.CSS — Edição de Conta (Redesign)
    ================================================== */
+
+/* ── KEYFRAMES ── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(110%) scale(0.95); }
+    to   { opacity: 1; transform: translateX(0)   scale(1); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0)   scale(1); }
+    to   { opacity: 0; transform: translateX(110%) scale(0.95); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes shimmerAvatar {
+    0%   { box-shadow: 0 0 0 0   rgba(161,125,77,0.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(161,125,77,0); }
+    100% { box-shadow: 0 0 0 0   rgba(161,125,77,0); }
+}
+
+@keyframes orbPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(1.1); }
+}
+
+/* ── FUNDO ATMOSFÉRICO ── */
 .profile-page {
-    background-color: var(--bege-claro);
-    min-height: 100vh;
+    background:
+        radial-gradient(ellipse 70% 55% at 5% 15%,  rgba(90,26,27,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 95% 85%, rgba(161,125,77,0.09) 0%, transparent 60%),
+        var(--bege-claro);
+    position: relative;
 }
 
+.profile-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235a1a1b' fill-opacity='0.022' fill-rule='evenodd'%3E%3Cpath d='M26 0L0 26l26 26 26-26z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.profile-page::after {
+    content: '';
+    position: fixed;
+    bottom: -100px;
+    left: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90,26,27,0.10) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbPulse 9s ease-in-out infinite;
+}
+
+/* ── CONTAINER ── */
 .profile-container {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 20px;
+    max-width: 680px;
+    margin: 52px auto 60px;
+    padding: 0 20px;
     width: 100%;
-    /* Garante que não ultrapassa a largura da tela */
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.55s ease both;
 }
 
+/* ── CARD PRINCIPAL ── */
 .profile-card {
-    background: var(--branco);
-    border-radius: 15px;
-    padding: 40px;
-    box-shadow: 0 10px 30px var(--sombra);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 24px;
+    padding: 48px 44px;
+    box-shadow:
+        0 4px 24px rgba(90,26,27,0.08),
+        0 16px 56px rgba(90,26,27,0.10),
+        inset 0 0 0 1px rgba(255,255,255,0.55);
     position: relative;
     overflow: hidden;
     width: 100%;
 }
 
-/* Faixa decorativa no topo do cartão */
+/* Faixa gradiente no topo */
 .profile-card::before {
-    content: "";
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 8px;
-    background: linear-gradient(90deg, var(--vinho), var(--dourado), var(--vinho));
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--vinho), var(--dourado), var(--vinho-claro));
+    border-radius: 24px 24px 0 0;
 }
 
-/* Área da Foto (Avatar) */
+/* Orbe decorativo interno */
+.profile-card::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(161,125,77,0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* ── HEADER DO FORMULÁRIO ── */
+.form-header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeInDown 0.5s ease both;
+}
+
+.form-header h2 {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--vinho);
+    letter-spacing: -0.4px;
+    margin-bottom: 8px;
+}
+
+.form-header p {
+    color: var(--texto-claro);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* ── AVATAR ── */
 .profile-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 30px;
-    text-align: center;
+    margin-bottom: 36px;
+    animation: scaleIn 0.5s ease 0.1s both;
 }
 
 .avatar-wrapper {
     position: relative;
-    width: 150px;
-    height: 150px;
-    margin-bottom: 10px;
+    width: 148px;
+    height: 148px;
+    margin-bottom: 12px;
 }
 
 .avatar-img {
@@ -56,18 +167,24 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid var(--branco);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 4px solid white;
+    box-shadow:
+        0 0 0 3px var(--dourado),
+        0 8px 28px rgba(90,26,27,0.18);
+    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
 }
 
-/* Botão de câmara flutuante */
+.avatar-wrapper:hover .avatar-img {
+    transform: scale(1.04);
+    animation: shimmerAvatar 1.2s ease;
+}
+
 .avatar-upload-btn {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background: var(--dourado);
+    bottom: 6px;
+    right: 6px;
+    background: linear-gradient(135deg, var(--dourado), var(--dourado-claro));
     color: white;
-    border: none;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -75,36 +192,53 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 3px solid white;
+    box-shadow: 0 4px 14px rgba(90,26,27,0.2);
+    transition: transform 0.28s cubic-bezier(0.23,1,0.32,1), box-shadow 0.28s ease;
 }
 
 .avatar-upload-btn:hover {
-    transform: scale(1.1);
-    background: var(--dourado-claro);
+    transform: scale(1.15) rotate(-8deg);
+    box-shadow: 0 6px 20px rgba(161,125,77,0.4);
 }
 
-#fotoInput {
-    display: none;
+#fotoInput { display: none; }
+
+.profile-header > p {
+    color: var(--texto-claro);
+    font-size: 0.82rem;
+    font-style: italic;
 }
 
-/* ==================================================
-   FORMULÁRIO E INPUTS
-   ================================================== */
+/* ── GRUPOS DE FORMULÁRIO ── */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
+    animation: fadeInUp 0.5s ease both;
 }
+
+.form-group:nth-child(1) { animation-delay: 0.15s; }
+.form-group:nth-child(2) { animation-delay: 0.22s; }
+.form-group:nth-child(3) { animation-delay: 0.29s; }
+.form-group:nth-child(4) { animation-delay: 0.36s; }
 
 .form-group label {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 9px;
     color: var(--vinho);
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
 }
 
+.form-group label i {
+    color: var(--dourado);
+    font-size: 0.9rem;
+}
+
+/* ── INPUTS ── */
 .input-with-icon {
     position: relative;
     width: 100%;
@@ -112,129 +246,181 @@
 
 .input-with-icon input {
     width: 100%;
-    padding: 14px 15px 14px 45px;
-    /* Deixa 45px de espaço à esquerda para o ícone! */
-    border: 2px solid var(--bege-escuro);
-    border-radius: 10px;
-    background-color: var(--bege-claro);
+    padding: 14px 18px 14px 46px;
+    border: 1.5px solid var(--bege-escuro);
+    border-radius: 14px;
+    background: rgba(248,244,240,0.7);
     font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    font-size: 0.97rem;
+    color: var(--texto);
+    transition: border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
 }
 
 .input-with-icon input:focus {
     outline: none;
     border-color: var(--dourado);
-    background-color: var(--branco);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(161,125,77,0.12), 0 4px 16px rgba(90,26,27,0.06);
 }
 
-.input-with-icon .input-icon {
+.input-icon {
     position: absolute;
-    left: 15px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--dourado);
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: color 0.25s ease;
+}
+
+.input-with-icon input:focus ~ .input-icon {
+    color: var(--dourado-claro);
 }
 
 textarea.form-control {
     width: 100%;
-    padding: 15px;
-    border: 2px solid var(--bege-escuro);
-    border-radius: 10px;
-    background-color: var(--bege-claro);
+    padding: 15px 18px;
+    border: 1.5px solid var(--bege-escuro);
+    border-radius: 14px;
+    background: rgba(248,244,240,0.7);
     font-family: inherit;
+    font-size: 0.97rem;
+    color: var(--texto);
     resize: vertical;
-    min-height: 100px;
-    transition: all 0.3s ease;
+    min-height: 110px;
+    transition: border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+    line-height: 1.6;
 }
 
 textarea.form-control:focus {
     outline: none;
     border-color: var(--dourado);
-    background-color: var(--branco);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(161,125,77,0.12), 0 4px 16px rgba(90,26,27,0.06);
 }
 
-/* Botão Salvar */
+/* ── BOTÃO SALVAR ── */
 .btn-login {
     width: 100%;
-    padding: 15px;
+    padding: 16px;
     background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
     color: white;
     border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.97rem;
+    letter-spacing: 0.4px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: all 0.3s ease;
-    margin-top: 10px;
+    margin-top: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(90,26,27,0.28);
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+}
+
+/* Brilho deslizante no hover */
+.btn-login::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.55s ease;
 }
 
 .btn-login:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px var(--sombra-forte);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(90,26,27,0.35);
 }
 
-/* ==================================================
-   MENSAGENS DE FEEDBACK (Toast Moderno)
-   ================================================== */
+.btn-login:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-login:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: 0 4px 14px rgba(90,26,27,0.25);
+}
+
+.btn-login:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── TOAST / ALERT ── */
 .alert {
     position: fixed;
-    top: 30px;
-    right: 30px;
-    padding: 16px 25px;
-    border-radius: 12px;
-    background: var(--branco);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    top: 88px;
+    right: 28px;
+    padding: 16px 22px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.12),
+        0 2px 8px rgba(0,0,0,0.06);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 14px;
     z-index: 10000;
     font-weight: 500;
-    font-size: 0.95rem;
-    transform: translateX(150%);
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    font-size: 0.93rem;
+    max-width: 340px;
+
+    /* Estado inicial: fora da tela */
+    opacity: 0;
+    transform: translateX(110%) scale(0.95);
+    pointer-events: none;
+    transition: none;
 }
 
 .alert.show {
-    transform: translateX(0);
+    animation: toastIn 0.45s cubic-bezier(0.23,1,0.32,1) forwards;
+    pointer-events: auto;
+}
+
+.alert.hide {
+    animation: toastOut 0.38s ease forwards;
 }
 
 .alert-success {
-    border-left: 5px solid var(--sucesso);
-    color: var(--texto);
+    border-left: 4px solid var(--sucesso);
 }
 
 .alert-success i {
     color: var(--sucesso);
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    flex-shrink: 0;
 }
 
 .alert-error {
-    border-left: 5px solid var(--erro);
-    color: var(--texto);
+    border-left: 4px solid var(--erro);
 }
 
 .alert-error i {
     color: var(--erro);
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    flex-shrink: 0;
 }
 
-/* ==================================================
-   RESPONSIVIDADE MOBILE (A Mágica Acontece Aqui)
-   ================================================== */
+/* ── RESPONSIVO ── */
 @media (max-width: 768px) {
     .profile-container {
-        padding: 15px;
-        margin: 20px auto;
+        margin: 28px auto 48px;
+        padding: 0 14px;
     }
 
     .profile-card {
-        padding: 30px 20px;
-        /* Reduzimos o padding gigante para dar espaço aos inputs! */
+        padding: 32px 22px;
+        border-radius: 20px;
     }
 
     .avatar-wrapper {
@@ -242,7 +428,70 @@ textarea.form-control:focus {
         height: 120px;
     }
 
-    .form-header h2 {
-        font-size: 1.6rem;
+    .alert {
+        top: auto;
+        bottom: 24px;
+        right: 16px;
+        left: 16px;
+        max-width: none;
     }
+}
+
+.main-footer {
+    background: linear-gradient(135deg, var(--vinho) 0%, #3d0e0f 100%);
+    color: white;
+    padding: 36px 20px;
+    margin-top: auto;
+    font-size: 0.88rem;
+    border-top: 3px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+}
+
+.footer-info {
+    text-align: center;
+}
+
+.footer-info p {
+    margin: 5px 0;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-info .credits {
+    font-size: 0.8rem;
+    color: var(--bege-claro);
+    opacity: 0.85;
+}
+
+/* ── COMPONENTES DO FOOTER ── */
+.footer-link-btn {
+    color: var(--dourado);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    background: rgba(161, 125, 77, 0.1);
+    border: 1px solid rgba(161, 125, 77, 0.25);
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+
+.footer-link-btn:hover {
+    background: rgba(161, 125, 77, 0.25);
+    color: white;
+    transform: translateY(-2px);
+    border-color: rgba(161, 125, 77, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }

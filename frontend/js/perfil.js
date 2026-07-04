@@ -1,24 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     carregarDadosPerfil();
 
-    // Visualizar imagem assim que o utilizador seleciona um arquivo
     const fotoInput = document.getElementById('fotoInput');
     const avatarPreview = document.getElementById('avatarPreview');
 
-    fotoInput.addEventListener('change', function() {
+    fotoInput.addEventListener('change', function () {
         const arquivo = this.files[0];
-        if (arquivo) {
-            const leitor = new FileReader();
-            leitor.onload = function(e) {
+        if (!arquivo) return;
+        const leitor = new FileReader();
+        leitor.onload = (e) => {
+            avatarPreview.style.transition = 'opacity 0.25s ease';
+            avatarPreview.style.opacity = '0';
+            setTimeout(() => {
                 avatarPreview.src = e.target.result;
-            }
-            leitor.readAsDataURL(arquivo);
-        }
+                avatarPreview.style.opacity = '1';
+            }, 250);
+        };
+        leitor.readAsDataURL(arquivo);
     });
 
-    // Enviar formulário
-    const form = document.getElementById('perfilForm');
-    form.addEventListener('submit', salvarPerfil);
+    document.getElementById('perfilForm').addEventListener('submit', salvarPerfil);
 });
 
 async function carregarDadosPerfil() {
@@ -27,20 +28,14 @@ async function carregarDadosPerfil() {
         const data = await response.json();
 
         if (data.success) {
-            const usuario = data.dados;
-            document.getElementById('nome').value = usuario.nome;
-            document.getElementById('bio').value = usuario.bio || '';
+            const u = data.dados;
+            document.getElementById('nome').value = u.nome;
+            document.getElementById('bio').value = u.bio || '';
 
-            // Se tiver foto, mostra. Se não, usa um gerador de avatar com as iniciais
-            if (usuario.foto_perfil) {
-                // Adiciona '../' porque a imagem vem como 'uploads/foto.jpg' do banco
-                document.getElementById('avatarPreview').src = '../' + usuario.foto_perfil;
-            } else {
-                // Avatar automático com as iniciais do nome
-                document.getElementById('avatarPreview').src = `https://ui-avatars.com/api/?name=${usuario.nome}&background=efe7dd&color=5a1a1b`;
-            }
+            document.getElementById('avatarPreview').src = u.foto_perfil
+                ? '../' + u.foto_perfil
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.nome)}&background=efe7dd&color=5a1a1b`;
         } else {
-            // Se não estiver logado, manda para o login
             window.location.href = '../../index.html';
         }
     } catch (error) {
@@ -50,56 +45,64 @@ async function carregarDadosPerfil() {
 
 async function salvarPerfil(e) {
     e.preventDefault();
-    
-    const btn = document.querySelector('.btn-login');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-    btn.disabled = true;
 
-    const form = document.getElementById('perfilForm');
-    // FormData é essencial para enviar Arquivos + Texto
-    const formData = new FormData(form);
+    const btn = document.querySelector('.btn-login');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-circle-notch" style="animation: spin 0.8s linear infinite;"></i> Salvando...';
+    btn.disabled = true;
 
     try {
         const response = await fetch('../../backend/auth/atualizar_perfil.php', {
             method: 'POST',
-            body: formData
+            body: new FormData(document.getElementById('perfilForm'))
         });
 
         const data = await response.json();
-        const msgDiv = document.getElementById('mensagem');
 
-        msgDiv.style.display = 'block';
-       if (data.success) {
-            msgDiv.className = 'alert alert-success show';
-            // Usamos innerHTML para podermos colocar o ícone do Font Awesome
-            msgDiv.innerHTML = '<i class="fas fa-check-circle"></i> Perfil atualizado com sucesso!';
-            
-            // Esconde a mensagem suavemente após 3.5 segundos
-            setTimeout(() => {
-                msgDiv.classList.remove('show');
-            }, 3500);
-            
+        if (data.success) {
+            mostrarToast('success', '<i class="fas fa-check-circle"></i> Perfil atualizado com sucesso!');
         } else {
-            msgDiv.className = 'alert alert-error show';
-            msgDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Erro ao atualizar.');
-            
-            setTimeout(() => {
-                msgDiv.classList.remove('show');
-            }, 4000); // Dá um pouco mais de tempo para ler erros
+            mostrarToast('error', `<i class="fas fa-exclamation-circle"></i> ${data.message || 'Erro ao atualizar.'}`);
         }
-
     } catch (error) {
         console.error('Erro:', error);
-        alert('Erro de conexão.');
+        mostrarToast('error', '<i class="fas fa-wifi"></i> Erro de conexão. Tente novamente.');
     } finally {
-        btn.innerHTML = originalText;
+        btn.innerHTML = originalHTML;
         btn.disabled = false;
     }
 }
 
+// ── Toast ─────────────────────────────────────────
+let toastTimer = null;
+
+function mostrarToast(tipo, htmlContent) {
+    const msgDiv = document.getElementById('mensagem');
+
+    // Cancela timer anterior se ainda estiver rodando
+    if (toastTimer) {
+        clearTimeout(toastTimer);
+        msgDiv.classList.remove('show', 'hide');
+        // Força reflow para reiniciar animação
+        void msgDiv.offsetWidth;
+    }
+
+    msgDiv.className = `alert alert-${tipo} show`;
+    msgDiv.innerHTML = htmlContent;
+
+    const duracao = tipo === 'error' ? 4500 : 3500;
+
+    toastTimer = setTimeout(() => {
+        msgDiv.classList.remove('show');
+        msgDiv.classList.add('hide');
+        setTimeout(() => {
+            msgDiv.className = 'alert';
+        }, 400);
+        toastTimer = null;
+    }, duracao);
+}
+
 function logout() {
-    // Podes implementar uma chamada ao backend para destruir a sessão aqui se quiseres
-    // Por enquanto, apenas redireciona
+    sessionStorage.clear();
     window.location.href = '../../index.html';
 }
