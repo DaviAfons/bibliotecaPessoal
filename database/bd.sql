@@ -58,3 +58,7 @@ ALTER TABLE livros MODIFY COLUMN imagem LONGTEXT;
 ALTER TABLE usuarios 
 ADD COLUMN token_recuperacao VARCHAR(255) DEFAULT NULL,
 ADD COLUMN token_expiracao DATETIME DEFAULT NULL;
+
+UPDATE livros 
+SET imagem = NULL 
+WHERE imagem LIKE 'data:image%';
