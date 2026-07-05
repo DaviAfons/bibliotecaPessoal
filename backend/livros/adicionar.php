@@ -21,6 +21,28 @@ if ($dados) {
         // Inicia uma transação para garantir que ou salva tudo ou nada
         $pdo->beginTransaction();
 
+        $caminhoCapa = null;
+
+        // --- UPLOAD FÍSICO DE IMAGEM ---
+        if (!empty($dados['imagem']) && strpos($dados['imagem'], 'data:image') === 0) {
+            $partes = explode(',', $dados['imagem']);
+            $conteudoImagem = base64_decode($partes[1]);
+            
+            preg_match('/^data:image\/(\w+);/i', $partes[0], $match);
+            $extensao = $match[1] ?? 'jpg';
+            
+            $nomeArquivo = uniqid('capa_') . '.' . $extensao;
+            $pastaUploads = __DIR__ . '/../../uploads';
+            
+            if (!is_dir($pastaUploads)) {
+                mkdir($pastaUploads, 0777, true);
+            }
+            
+            file_put_contents($pastaUploads . '/' . $nomeArquivo, $conteudoImagem);
+            $caminhoCapa = 'uploads/' . $nomeArquivo; // Apenas o caminho vai para o BD
+        }
+        // ------------------------------
+
         // 3. Salva os dados básicos do livro
         $sucesso = $livroModel->criar(
             $_SESSION['usuario_id'],
@@ -29,7 +51,7 @@ if ($dados) {
             $dados['ano'],
             $dados['status'],
             $dados['descricao'],
-            $dados['imagem'],
+            $caminhoCapa, 
             $dados['avaliacao']
         );
 
