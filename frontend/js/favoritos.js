@@ -73,9 +73,15 @@ async function carregarFavoritos() {
                 ).join('')
                 : `<span class="genre-tag">Geral</span>`;
 
-            const imagemSrc = livro.imagem && livro.imagem.trim() !== ''
-                ? livro.imagem
-                : 'https://via.placeholder.com/150x220?text=Capa';
+            // CORREÇÃO DA IMAGEM: Adaptado para o novo padrão de arquivos físicos
+            let imagemSrc = 'https://via.placeholder.com/150x220?text=Capa';
+            if (livro.imagem && livro.imagem.trim() !== '') {
+                if (livro.imagem.startsWith('data:image')) {
+                    imagemSrc = livro.imagem;
+                } else {
+                    imagemSrc = '../../' + livro.imagem; // Volta para a raiz para achar a pasta uploads
+                }
+            }
 
             return `
                 <div class="fav-card" style="animation-delay:${0.05 + idx * 0.06}s">
@@ -114,6 +120,8 @@ function confirmarRemocao(id, titulo) {
 
     overlay.innerHTML = `
         <div class="modal-glass" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="close-glass-modal" id="modal-close-x" aria-label="Fechar modal">&times;</button>
+            
             <h3 id="modal-title"><i class="fas fa-heart" style="color:#e04040; margin-right:10px;"></i>Remover Favorito</h3>
             <p>Deseja remover <strong style="color:var(--vinho);">${titulo}</strong> da sua coleção especial?</p>
             <div class="modal-actions">
@@ -127,31 +135,35 @@ function confirmarRemocao(id, titulo) {
 
     // Fechar ao clicar fora
     overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) fecharModal();
+        if (e.target === overlay) fecharModalFavorito();
     });
 
     // Fechar com Escape
-    document.addEventListener('keydown', escListener);
+    document.addEventListener('keydown', escListenerFavorito);
 
-    document.getElementById('modal-cancel').addEventListener('click', fecharModal);
+    // Botões
+    document.getElementById('modal-cancel').addEventListener('click', fecharModalFavorito);
+    document.getElementById('modal-close-x').addEventListener('click', fecharModalFavorito); // NOVO: Ação do X
+
     document.getElementById('modal-confirm').addEventListener('click', () => {
-        fecharModal();
+        fecharModalFavorito();
         removerFavorito(id);
     });
 }
 
-function fecharModal() {
+// CORREÇÃO: Função renomeada para não dar conflito com o livros.js
+function fecharModalFavorito() {
     const overlay = document.getElementById('fav-modal');
     if (!overlay) return;
     overlay.style.animation = 'none';
     overlay.style.opacity = '0';
     overlay.style.transition = 'opacity 0.22s ease';
     setTimeout(() => overlay.remove(), 230);
-    document.removeEventListener('keydown', escListener);
+    document.removeEventListener('keydown', escListenerFavorito);
 }
 
-function escListener(e) {
-    if (e.key === 'Escape') fecharModal();
+function escListenerFavorito(e) {
+    if (e.key === 'Escape') fecharModalFavorito();
 }
 
 // ── Remover Favorito ──────────────────────────────────
