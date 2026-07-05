@@ -1,9 +1,57 @@
 /* ==================================================
-   LOGIN.CSS - Específico para Login e Recuperação
+   LOGIN.CSS — Redesign Moderno
    ================================================== */
 
+/* ── KEYFRAMES ── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateX(-50%) rotate(-5deg) translateY(0px); }
+    50%       { transform: translateX(-50%) rotate(-5deg) translateY(-8px); }
+}
+
+@keyframes float2 {
+    0%, 100% { transform: translateX(-50%) translateY(0px); }
+    50%       { transform: translateX(-50%) translateY(-5px); }
+}
+
+@keyframes float3 {
+    0%, 100% { transform: translateX(-50%) rotate(5deg) translateY(0px); }
+    50%       { transform: translateX(-50%) rotate(5deg) translateY(-11px); }
+}
+
+@keyframes shimmerBtn {
+    0%   { transform: translateX(-100%) skewX(-15deg); }
+    100% { transform: translateX(250%) skewX(-15deg); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-7px); }
+    20%, 40%, 60%, 80%      { transform: translateX(7px); }
+}
+
+@keyframes fadeInError {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(161, 125, 77, 0); }
+    50%       { box-shadow: 0 0 0 6px rgba(161, 125, 77, 0.15); }
+}
+
+/* ── PÁGINA ── */
 .login-page {
-    background: linear-gradient(135deg, var(--bege-claro) 0%, var(--bege-medio) 100%);
+    background: var(--bege-claro);
     display: flex;
     margin: 0;
     min-height: 100vh;
@@ -15,166 +63,228 @@
     min-height: 100vh;
 }
 
-/* ===== Lado Esquerdo - Decoração ===== */
+/* ════════════════════════════════════════
+   LADO ESQUERDO — DECORAÇÃO
+   ════════════════════════════════════════ */
 .login-decoration {
     flex: 1;
-    background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
-    padding: 40px;
+    background:
+        radial-gradient(ellipse 70% 50% at 30% 0%,   rgba(161,125,77,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 100%, rgba(90,26,27,0.4)    0%, transparent 60%),
+        linear-gradient(160deg, #3d0e0f 0%, var(--vinho) 45%, #6b2020 100%);
+    padding: 48px 40px;
     display: none;
-    /* Escondido no mobile */
     flex-direction: column;
     justify-content: center;
-    /* Centraliza tudo no meio */
     align-items: center;
-    gap: 40px;
-    /* O SEGREDO: Garante 40px de distância INVIOLÁVEL entre Logo, Livros e Benefícios */
+    gap: 44px;
     color: white;
     position: relative;
     overflow: hidden;
 }
 
-@media (min-width: 992px) {
-    .login-decoration {
-        display: flex;
-    }
-
-    .login-form-container {
-        flex: 1.2;
-    }
-}
-
-/* Ilustração dos Livros */
-.book-illustration {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.book-stack {
-    position: relative;
-    width: 200px;
-    height: 260px;
-    margin: 0 auto 20px;
-}
-
-.book {
+/* Linhas decorativas de fundo */
+.login-decoration::before {
+    content: '';
     position: absolute;
-    border-radius: 4px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 40px,
+            rgba(255,255,255,0.015) 40px,
+            rgba(255,255,255,0.015) 41px
+        );
+    pointer-events: none;
 }
 
-.book-1 {
-    width: 160px;
-    height: 220px;
-    background: linear-gradient(135deg, #f3f8f6, #a8bbd4);
-    left: 50%;
-    transform: translateX(-50%) rotate(-5deg);
-    z-index: 1;
-    top: 20px;
+/* Círculo ornamental canto inferior direito */
+.login-decoration::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -100px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 60px solid rgba(161,125,77,0.08);
+    pointer-events: none;
 }
 
-.book-2 {
-    width: 170px;
-    height: 230px;
-    background: linear-gradient(45deg, #c2a879, #996330);
-    left: calc(50% + 15px);
-    transform: translateX(-50%);
-    z-index: 2;
-    top: 10px;
+@media (min-width: 992px) {
+    .login-decoration { display: flex; }
+    .login-form-container { flex: 1.2; }
 }
 
-.book-3 {
-    width: 180px;
-    height: 240px;
-    background: linear-gradient(45deg, #458894, #3f6b9c);
-    left: calc(50% + 30px);
-    transform: translateX(-50%) rotate(5deg);
-    z-index: 3;
-    top: 0;
-}
-
+/* ── LOGO ── */
 .logo-section {
     z-index: 2;
     text-align: center;
+    animation: fadeInUp 0.7s ease both;
 }
 
 .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 16px;
 }
 
 .logo i {
     font-size: 3rem;
     color: var(--dourado);
+    filter: drop-shadow(0 0 16px rgba(161,125,77,0.6));
 }
 
 .logo h1 {
     color: white;
-    font-size: 2.2rem;
-    font-weight: 300;
+    font-size: 2.1rem;
+    font-weight: 800;
     margin: 0;
     text-align: left;
     line-height: 1.1;
+    letter-spacing: -0.5px;
 }
 
 .slogan {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
-    margin-top: 15px;
+    color: rgba(255,255,255,0.65);
+    font-size: 1rem;
+    margin-top: 12px;
     margin-bottom: 0;
+    letter-spacing: 0.3px;
 }
 
+/* ── ILUSTRAÇÃO ── */
+.book-illustration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    animation: fadeInUp 0.7s 0.1s ease both;
+}
+
+.book-stack {
+    position: relative;
+    width: 200px;
+    height: 260px;
+    margin: 0 auto 24px;
+}
+
+.book {
+    position: absolute;
+    border-radius: 4px 8px 8px 4px;
+}
+
+/* Lombada */
+.book::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 14px; height: 100%;
+    border-radius: 4px 0 0 4px;
+    background: rgba(0,0,0,0.2);
+}
+
+.book-1 {
+    width: 158px; height: 218px;
+    background: linear-gradient(135deg, #d4e8f0, #8fb3cc);
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    top: 20px; z-index: 1;
+    box-shadow: -4px 6px 20px rgba(0,0,0,0.3);
+    animation: float 5s ease-in-out infinite;
+}
+
+.book-2 {
+    width: 168px; height: 228px;
+    background: linear-gradient(135deg, #d4b896, #8c6030);
+    left: calc(50% + 15px);
+    transform: translateX(-50%);
+    top: 10px; z-index: 2;
+    box-shadow: -4px 6px 20px rgba(0,0,0,0.35);
+    animation: float2 5s 0.6s ease-in-out infinite;
+}
+
+.book-3 {
+    width: 178px; height: 238px;
+    background: linear-gradient(135deg, #7ec8cc, #2d6b8c);
+    left: calc(50% + 30px);
+    transform: translateX(-50%) rotate(5deg);
+    top: 0; z-index: 3;
+    box-shadow: -4px 6px 20px rgba(0,0,0,0.4);
+    animation: float3 5s 1.2s ease-in-out infinite;
+}
+
+/* Linhas simulando páginas */
+.book-2::after, .book-3::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 10%;
+    width: 6px; height: 80%;
+    background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.35) 0px,
+        rgba(255,255,255,0.35) 2px,
+        transparent 2px,
+        transparent 6px
+    );
+    border-radius: 0 2px 2px 0;
+}
+
+/* ── CITAÇÃO ── */
 .quote {
     text-align: center;
-    max-width: 90%;
+    max-width: 88%;
     margin: 0 auto;
 }
 
 .quote i {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: var(--dourado);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: block;
+    opacity: 0.8;
 }
 
 .quote p {
     font-style: italic;
-    margin-bottom: 5px;
-    font-size: 0.95rem;
-    line-height: 1.4;
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.82);
 }
 
 .author {
-    font-size: 0.85rem;
-    color: var(--bege-escuro);
+    font-size: 0.8rem;
+    color: var(--dourado);
+    font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
+/* ── FEATURES ── */
 .features {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 25px;
-    backdrop-filter: blur(5px);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(8px);
     width: 100%;
-    max-width: 380px;
+    max-width: 360px;
+    animation: fadeInUp 0.7s 0.2s ease both;
 }
 
 .features h3 {
     color: var(--dourado);
-    margin-top: 0;
-    margin-bottom: 15px;
+    margin: 0 0 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 .features ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 0; margin: 0;
 }
 
 .features li {
@@ -182,47 +292,72 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 12px;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.8);
 }
 
-.features li:last-child {
-    margin-bottom: 0;
+.features li:last-child { margin-bottom: 0; }
+
+.features li i {
+    color: var(--dourado);
+    width: 16px;
+    text-align: center;
+    font-size: 0.85rem;
 }
 
-/* ===== Lado Direito - Formulário ===== */
+/* ════════════════════════════════════════
+   LADO DIREITO — FORMULÁRIO
+   ════════════════════════════════════════ */
 .login-form-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    background: var(--branco);
+    padding: 40px 24px;
+    background: white;
     width: 100%;
+    position: relative;
+}
+
+/* Padrão sutil de fundo no lado do form */
+.login-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(161,125,77,0.05) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .form-wrapper {
-    max-width: 450px;
+    max-width: 440px;
     width: 100%;
+    animation: fadeInUp 0.6s 0.15s ease both;
 }
 
+/* ── CABEÇALHO DO FORM ── */
 .form-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
 }
 
 .form-header h2 {
     font-size: 2rem;
-    font-weight: 300;
-    margin-bottom: 5px;
+    font-weight: 800;
+    margin-bottom: 6px;
     color: var(--vinho);
+    letter-spacing: -0.5px;
 }
 
 .form-header p {
     color: var(--texto-claro);
-    margin-top: 0;
+    margin: 0;
+    font-size: 0.92rem;
 }
 
+/* ── GRUPOS DE CAMPO ── */
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 22px;
 }
 
 .form-group label {
@@ -230,14 +365,21 @@
     align-items: center;
     gap: 8px;
     color: var(--vinho);
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 8px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
-/* A mágica do Posicionamento dos Ícones acontece aqui */
+.form-group label i {
+    color: var(--dourado);
+    font-size: 0.9rem;
+}
+
+/* ── INPUTS ── */
 .input-with-icon {
     position: relative;
-    /* A tal da jaula */
     width: 100%;
     display: flex;
     align-items: center;
@@ -245,52 +387,65 @@
 
 .form-control {
     width: 100%;
-    padding: 16px 18px 16px 45px;
-    /* Espaço extra na esquerda (45px) para o ícone não pisar no texto */
-    border: 2px solid var(--bege-escuro);
-    border-radius: 10px;
+    padding: 14px 18px 14px 46px;
+    border: 1.5px solid var(--bege-escuro);
+    border-radius: 12px;
     background-color: var(--bege-claro);
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
     font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--texto);
+    outline: none;
 }
+
+.form-control::placeholder { color: #b0a898; }
 
 .form-control:focus {
-    outline: none;
     border-color: var(--dourado);
-    background-color: var(--branco);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(161,125,77,0.1);
 }
 
-/* Ícone da Esquerda (Email/Cadeado) */
+/* Ícone esquerdo */
 .input-icon {
     position: absolute;
-    /* Flutua dentro do input */
-    left: 15px;
+    left: 16px;
     color: var(--dourado);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: transform 0.3s;
 }
 
-/* Ícone da Direita (Olho da Senha) */
+.input-with-icon:focus-within .input-icon {
+    transform: scale(1.15);
+}
+
+/* Botão olho */
 .toggle-password {
     position: absolute;
-    right: 15px;
+    right: 14px;
     background: transparent;
     border: none;
     cursor: pointer;
     color: var(--texto-claro);
-    padding: 0;
-    font-size: 1.1rem;
+    padding: 4px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    line-height: 1;
 }
 
 .toggle-password:hover {
     color: var(--dourado);
+    background: rgba(161,125,77,0.08);
 }
 
-/* Opções (Lembrar-me e Esqueci a Senha) */
+/* ── OPÇÕES ── */
 .form-options {
     display: flex;
     justify-content: space-between;
-    /* Empurra um para cada lado */
     align-items: center;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .remember-me {
@@ -298,123 +453,175 @@
     align-items: center;
     gap: 8px;
     color: var(--texto-claro);
-    font-size: 0.9rem;
-    font-weight: normal !important;
+    font-size: 0.85rem;
+    font-weight: 400 !important;
     cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--dourado);
+    width: 15px; height: 15px;
 }
 
 .forgot-password {
-    color: var(--vinho);
+    color: var(--dourado);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
 }
 
 .forgot-password:hover {
+    color: var(--vinho);
     text-decoration: underline;
 }
 
-/* Botão Entrar */
+/* ── ERRO INLINE ── */
+.inline-error {
+    background: linear-gradient(135deg, #fce8e8, #fdf0f0);
+    color: #a33030;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid rgba(200, 80, 80, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    animation: fadeInError 0.3s ease forwards;
+    box-shadow: 0 2px 12px rgba(163, 48, 48, 0.1);
+}
+
+.inline-error i { font-size: 0.95rem; }
+
+/* ── BOTÃO ENTRAR ── */
 .btn-login {
     width: 100%;
-    padding: 16px;
+    padding: 15px;
     background: linear-gradient(135deg, var(--vinho) 0%, var(--vinho-claro) 100%);
     color: white;
     border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow: 0 4px 18px rgba(90,26,27,0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito shimmer */
+.btn-login::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    transform: translateX(-100%) skewX(-15deg);
 }
 
 .btn-login:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px var(--sombra-forte);
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 10px 28px rgba(90,26,27,0.45);
 }
 
-/* Link Cadastre-se */
+.btn-login:hover::after {
+    animation: shimmerBtn 0.65s ease forwards;
+}
+
+.btn-login:active {
+    transform: translateY(-1px) scale(0.99);
+    box-shadow: 0 4px 14px rgba(90,26,27,0.35);
+}
+
+/* ── LINK DE CADASTRO ── */
 .signup-link {
     text-align: center;
-    margin-top: 20px;
-    font-size: 0.95rem;
+    margin-top: 22px;
+    font-size: 0.9rem;
+    color: var(--texto-claro);
 }
 
 .signup-link a {
     color: var(--vinho);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
+    transition: all 0.2s;
 }
 
 .signup-link a:hover {
+    color: var(--dourado);
     text-decoration: underline;
 }
 
-/* Responsividade do Login */
+/* ── ANIMAÇÃO SHAKE ── */
+.shake-animation {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* ── FOOTER DO LOGIN ── */
+.login-footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--bege-escuro);
+}
+
+.login-footer p {
+    font-size: 0.78rem;
+    color: var(--texto-claro);
+    margin: 4px 0;
+}
+
+.login-footer .credits {
+    color: var(--vinho);
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVIDADE
+   ════════════════════════════════════════ */
 @media (max-width: 991px) {
-    .login-container {
-        flex-direction: column;
-    }
+    .login-container { flex-direction: column; }
 
     .login-decoration {
         display: flex;
-        padding: 20px;
+        padding: 32px 20px 52px;
         justify-content: center;
         align-items: center;
+        gap: 28px;
     }
 
     .login-decoration .book-stack,
     .login-decoration .features,
-    .login-decoration .slogan,
     .login-decoration .quote {
         display: none;
     }
 
+    .login-decoration .slogan { display: block; }
+
     .login-form-container {
-        padding: 40px 20px;
-        border-radius: 20px 20px 0 0;
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, .05);
-        margin-top: -20px;
+        padding: 40px 20px 32px;
+        border-radius: 28px 28px 0 0;
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
+        margin-top: -28px;
         z-index: 10;
     }
 }
 
-.inline-error {
-    background-color: #fce4e4;
-    color: var(--erro);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    border: 1px solid #fccacb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    opacity: 0;
-    transform: translateY(-10px);
-    animation: fadeInError 0.3s forwards;
-}
-
-@keyframes fadeInError {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
-    20%, 40%, 60%, 80% { transform: translateX(6px); }
-}
-
-.shake-animation {
-    animation: shake 0.5s ease-in-out;
+@media (max-width: 480px) {
+    .form-header h2 { font-size: 1.65rem; }
+    .form-control { font-size: 0.88rem; }
 }
