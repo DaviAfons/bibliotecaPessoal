@@ -1,16 +1,19 @@
 <?php
-class Livro {
+class Livro
+{
     private $conn;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function criar($usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao = 0) {
+    public function criar($usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao = 0)
+    {
         try {
             $sql = "INSERT INTO livros (usuario_id, titulo, autor, ano_publicacao, status_leitura, descricao, imagem, avaliacao, favorito) 
                     VALUES (:u_id, :titulo, :autor, :ano, :status, :descricao, :imagem, :avaliacao, 0)";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':u_id', $usuario_id);
             $stmt->bindValue(':titulo', $titulo);
@@ -20,15 +23,16 @@ class Livro {
             $stmt->bindValue(':descricao', $descricao);
             $stmt->bindValue(':imagem', $imagem);
             $stmt->bindValue(':avaliacao', $avaliacao);
-            
+
             return $stmt->execute();
         } catch (PDOException $e) {
-            return false;
+            // Propaga o erro para o Controller tratar
+            throw $e;
         }
     }
 
-    // ATUALIZADO: Agora aceita um segundo parâmetro opcional $apenasFavoritos
-    public function listarPorUsuario($usuario_id, $apenasFavoritos = false) {
+    public function listarPorUsuario($usuario_id, $apenasFavoritos = false)
+    {
         $sql = "SELECT l.*, 
                 GROUP_CONCAT(g.nome SEPARATOR ', ') as generos_nomes,
                 GROUP_CONCAT(g.id SEPARATOR ',') as generos_ids
@@ -36,22 +40,21 @@ class Livro {
                 LEFT JOIN livro_genero lg ON l.id = lg.livro_id
                 LEFT JOIN generos g ON lg.genero_id = g.id
                 WHERE l.usuario_id = :u_id";
-        
+
         if ($apenasFavoritos) {
             $sql .= " AND l.favorito = 1";
         }
 
         $sql .= " GROUP BY l.id ORDER BY l.criado_em DESC";
-                
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':u_id', $usuario_id);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // NOVO MÉTODO: Alterna entre favorito (1) e não favorito (0)
-    public function alternarFavorito($id, $usuario_id) {
-        // Primeiro descobrimos o estado atual
+    public function alternarFavorito($id, $usuario_id)
+    {
         $sql = "SELECT favorito FROM livros WHERE id = :id AND usuario_id = :u_id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':id' => $id, ':u_id' => $usuario_id]);
@@ -59,7 +62,6 @@ class Livro {
 
         if (!$livro) return false;
 
-        // Inverte o valor (se era 0 vira 1, se era 1 vira 0)
         $novoEstado = $livro['favorito'] == 1 ? 0 : 1;
 
         $sqlUpdate = "UPDATE livros SET favorito = :favorito WHERE id = :id";
@@ -67,7 +69,8 @@ class Livro {
         return $stmtUpdate->execute([':favorito' => $novoEstado, ':id' => $id]);
     }
 
-    public function excluir($id, $usuario_id) {
+    public function excluir($id, $usuario_id)
+    {
         try {
             $sql = "DELETE FROM livros WHERE id = :id AND usuario_id = :u_id";
             $stmt = $this->conn->prepare($sql);
@@ -75,11 +78,12 @@ class Livro {
             $stmt->bindValue(':u_id', $usuario_id);
             return $stmt->execute();
         } catch (PDOException $e) {
-            return false;
+            throw $e;
         }
     }
 
-    public function atualizarStatus($livro_id, $usuario_id, $novo_status) {
+    public function atualizarStatus($livro_id, $usuario_id, $novo_status)
+    {
         try {
             $sql = "UPDATE livros SET status_leitura = :status WHERE id = :id AND usuario_id = :u_id";
             $stmt = $this->conn->prepare($sql);
@@ -88,11 +92,12 @@ class Livro {
             $stmt->bindValue(':u_id', $usuario_id);
             return $stmt->execute();
         } catch (PDOException $e) {
-            return false;
+            throw $e;
         }
     }
 
-    public function atualizarCompleto($id, $usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao, $generos = []) {
+    public function atualizarCompleto($id, $usuario_id, $titulo, $autor, $ano, $status, $descricao, $imagem, $avaliacao, $generos = [])
+    {
         try {
             $sql = "UPDATE livros SET 
                         titulo = :titulo, 
@@ -103,7 +108,7 @@ class Livro {
                         imagem = :imagem,
                         avaliacao = :avaliacao 
                     WHERE id = :id AND usuario_id = :u_id";
-            
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(':titulo', $titulo);
             $stmt->bindValue(':autor', $autor);
@@ -114,7 +119,7 @@ class Livro {
             $stmt->bindValue(':avaliacao', $avaliacao);
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':u_id', $usuario_id);
-            
+
             $resultado = $stmt->execute();
 
             if ($resultado) {
@@ -123,17 +128,20 @@ class Livro {
 
             return $resultado;
         } catch (PDOException $e) {
-            return false;
+            // Propaga o erro para o Controller tratar
+            throw $e;
         }
     }
 
-    public function listarGeneros() {
+    public function listarGeneros()
+    {
         $sql = "SELECT * FROM generos ORDER BY nome ASC";
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function vincularGeneros($livro_id, $generos_ids) {
+    public function vincularGeneros($livro_id, $generos_ids)
+    {
         $sqlDelete = "DELETE FROM livro_genero WHERE livro_id = :id";
         $stmtDel = $this->conn->prepare($sqlDelete);
         $stmtDel->execute(['id' => $livro_id]);
@@ -147,4 +155,3 @@ class Livro {
         }
     }
 }
-?>
