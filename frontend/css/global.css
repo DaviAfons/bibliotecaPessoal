@@ -1,8 +1,8 @@
 /* ==================================================
-   GLOBAL.CSS - Variáveis, Reset, Navbar e Footer
+   GLOBAL.CSS — Variáveis, Reset, Base e Componentes
    ================================================== */
 
-/* 1. VARIÁVEIS E CORES GERAIS */
+/* ── 1. VARIÁVEIS ── */
 :root {
     --vinho: #5a1a1b;
     --vinho-claro: #7a2a2b;
@@ -16,18 +16,21 @@
     --texto: #333333;
     --texto-claro: #666666;
     --branco: #ffffff;
-    --sombra: rgba(90, 26, 27, 0.08);
-    --sombra-forte: rgba(90, 26, 27, 0.15);
+    --sombra: 0 4px 20px rgba(90, 26, 27, 0.08);
+    --sombra-forte: 0 12px 40px rgba(90, 26, 27, 0.18);
     --sucesso: #28a745;
     --erro: #c45a5a;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
 
-    /* Variáveis Responsivas */
     --font-size-body: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
     --font-size-h1: clamp(1.6rem, 1.4rem + 1.5vw, 2.8rem);
 }
 
-/* 2. RESET E TIPOGRAFIA BÁSICA */
-* {
+/* ── 2. RESET ── */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -41,64 +44,88 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3 {
+h1, h2, h3 { color: var(--vinho); }
+h1 { font-size: var(--font-size-h1); }
+
+/* Seleção de texto */
+::selection {
+    background: rgba(161, 125, 77, 0.25);
     color: var(--vinho);
 }
 
-h1 {
-    font-size: var(--font-size-h1);
-}
-
-/* 3. NAVBAR (MENU DE NAVEGAÇÃO) */
+/* ── 3. NAVBAR ── */
 .navbar {
-    background-color: var(--vinho);
-    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--vinho) 0%, #3d0e0f 100%);
+    padding: 0 2rem;
+    height: 68px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    box-shadow: 0 4px 24px rgba(90, 26, 27, 0.35);
+    border-bottom: 1px solid rgba(161, 125, 77, 0.2);
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.35rem;
+    font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    color: white;
+    letter-spacing: -0.3px;
+}
+
+.navbar-brand i {
+    color: var(--dourado);
+    filter: drop-shadow(0 0 8px rgba(161,125,77,0.5));
 }
 
 .navbar-menu {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 6px;
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 500;
+    border: 1px solid transparent;
 }
 
 .nav-item:hover {
     color: var(--dourado);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(161, 125, 77, 0.2);
+    transform: translateY(-1px);
 }
 
 .nav-avatar {
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid white;
+    border: 2px solid var(--dourado);
+    box-shadow: 0 0 0 3px rgba(161, 125, 77, 0.2);
+    transition: box-shadow 0.3s;
+}
+
+.nav-item:hover .nav-avatar {
+    box-shadow: 0 0 0 4px rgba(161, 125, 77, 0.4);
 }
 
 .navbar-toggle {
@@ -106,23 +133,44 @@ h1 {
     background: transparent;
     border: none;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
+    padding: 7px;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
-.mobile-only {
-    display: none;
-}
+.navbar-toggle:hover { background: rgba(255,255,255,0.1); }
 
-/* 4. FOOTER (RODAPÉ GERAL) */
+.mobile-only { display: none; }
+
+/* ── 4. FOOTER ── */
 .main-footer {
-    background-color: var(--vinho);
+    background: linear-gradient(135deg, var(--vinho) 0%, #3d0e0f 100%);
     color: white;
-    padding: 40px 20px;
+    padding: 36px 20px;
     margin-top: auto;
-    /* Empurra o footer para o fundo */
-    font-size: 0.9rem;
-    border-top: 4px solid var(--dourado);
+    font-size: 0.88rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+}
+
+.main-footer::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(161,125,77,0.12), transparent 70%);
+    pointer-events: none;
 }
 
 .footer-content {
@@ -153,41 +201,37 @@ h1 {
 
 .footer-info p {
     margin: 5px 0;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .footer-info .credits {
     font-size: 0.8rem;
     color: var(--bege-claro);
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
-/* 5. RESPONSIVIDADE GLOBAL (Mobile) */
+/* ── 5. RESPONSIVIDADE ── */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 768px) {
-
-    /* Navbar Mobile */
-    .navbar {
-        padding: 1rem;
-    }
-
-    .navbar-toggle {
-        display: block;
-    }
-
-    .mobile-only {
-        display: inline;
-    }
+    .navbar { padding: 0 1rem; }
+    .navbar-toggle { display: block; }
+    .mobile-only { display: inline; }
 
     .navbar-menu {
         display: none;
         position: absolute;
-        top: 100%;
-        left: 0;
+        top: 68px; left: 0;
         width: 100%;
-        background-color: var(--vinho);
+        background: linear-gradient(180deg, #3d0e0f, var(--vinho));
         flex-direction: column;
-        padding: 20px 0;
+        padding: 16px 0;
         z-index: 1000;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        border-bottom: 1px solid rgba(161,125,77,0.2);
     }
 
     .navbar-menu.active {
@@ -196,33 +240,23 @@ h1 {
     }
 
     .nav-item {
-        padding: 15px;
+        padding: 14px;
         width: 100%;
         justify-content: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
     }
 
-    /* Footer Mobile */
+    .nav-item:last-child { border-bottom: none; }
+
     .footer-content {
         flex-direction: column;
         text-align: center;
-        gap: 30px;
+        gap: 24px;
     }
 
     .footer-section {
         flex-direction: column;
         max-width: 100%;
-    }
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
