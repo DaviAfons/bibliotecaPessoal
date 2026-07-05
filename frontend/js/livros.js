@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Elementos novos da imagem
     const inputFoto = document.getElementById('inputFoto');
     const previewImagem = document.getElementById('previewImagem');
-    const campoImagemHidden = document.getElementById('imagem');
 
     // --- 0. LÓGICA DE UPLOAD DE IMAGEM (NOVO) ---
     if (inputFoto) {
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const arquivo = evento.target.files[0];
 
             if (arquivo) {
-                // Verificação de tamanho (Opcional: avisa se for maior que 2MB)
                 if (arquivo.size > 2 * 1024 * 1024) {
                     alert('Atenção: Imagens muito grandes podem deixar o sistema lento. Tente usar imagens menores.');
                 }
@@ -29,9 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         previewImagem.style.display = 'block';
                     }
 
-                    // Preenche o campo oculto que será enviado ao PHP
-                    if (campoImagemHidden) {
-                        campoImagemHidden.value = resultadoBase64;
+                    // CORREÇÃO: Salva o Base64 no input hidden para enviar ao PHP
+                    const hiddenImg = document.getElementById('imagem');
+                    if (hiddenImg) {
+                        hiddenImg.value = resultadoBase64;
                     }
                 }
                 leitor.readAsDataURL(arquivo);
@@ -133,9 +132,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const ehFavorito = livro.favorito == 1;
 
             // Se não tiver imagem, usa um placeholder
-            const imagemSrc = livro.imagem && livro.imagem.trim() !== ''
-                ? livro.imagem
-                : 'https://via.placeholder.com/150x220?text=Sem+Capa';
+            const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='220' viewBox='0 0 150 220'%3E%3Crect width='150' height='220' fill='%23efe7dd'/%3E%3Ctext x='75' y='115' text-anchor='middle' font-size='13' fill='%235a1a1b' font-family='serif'%3ESem Capa%3C/text%3E%3C/svg%3E";
+
+            let imagemSrc = PLACEHOLDER;
+
+            if (livro.imagem && livro.imagem.trim() !== '') {
+                // Se a imagem for um Base64, usamos ela diretamente
+                if (livro.imagem.startsWith('data:image')) {
+                    imagemSrc = livro.imagem;
+                }
+                // CORREÇÃO: Dois '../' para voltar à raiz do projeto e acessar a pasta uploads
+                else {
+                    imagemSrc = '../../' + livro.imagem;
+                }
+            }
 
             return `
                 <div class="book-card" onclick="verDetalhes(${livro.id})">
@@ -213,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-                // Verificamos o texto antes de fazer o parse para JSON para ajudar no debug
+                
                 const textResult = await response.text();
 
                 try {
@@ -239,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarEstatisticas();
     carregarLivros();
 
-    // --- LISTENERS DE UI (antes inline no HTML) ---
+    // --- LISTENERS DE UI ---
     const navbarToggle = document.getElementById('navbarToggle');
     if (navbarToggle) {
         navbarToggle.addEventListener('click', () => {
@@ -294,11 +304,10 @@ window.fecharModal = () => {
         form.reset();
         delete form.dataset.editId;
         document.querySelector('.modal-header h3').innerHTML = '<i class="fas fa-book-medical"></i> Novo Livro';
-        // Desmarca todos os gêneros
+        
         document.querySelectorAll('#generos-checkboxes input[type="checkbox"]').forEach(cb => cb.checked = false);
     }
 
-    // Limpa a visualização e os campos de imagem
     if (preview) {
         preview.src = '';
         preview.style.display = 'none';
@@ -320,7 +329,7 @@ window.verDetalhes = (id) => {
         document.getElementById('status').value = livro.status_leitura;
         document.getElementById('descricao').value = livro.descricao || '';
 
-        // --- Lógica de Imagem ao Editar ---
+        // --- Lógica de Imagem ao Editar (CORRIGIDA) ---
         const hiddenImg = document.getElementById('imagem');
         const preview = document.getElementById('previewImagem');
 
@@ -328,7 +337,12 @@ window.verDetalhes = (id) => {
 
         if (preview) {
             if (livro.imagem && livro.imagem.trim() !== '') {
-                preview.src = livro.imagem;
+                if (livro.imagem.startsWith('data:image')) {
+                    preview.src = livro.imagem;
+                } else {
+                    // Dois '../' para voltar à raiz do projeto e carregar a pasta uploads
+                    preview.src = '../../' + livro.imagem;
+                }
                 preview.style.display = 'block';
             } else {
                 preview.style.display = 'none';
@@ -342,7 +356,6 @@ window.verDetalhes = (id) => {
 
         const selectGeneros = document.getElementById('generos-checkboxes');
         if (selectGeneros) {
-            // Desmarca todos primeiro
             selectGeneros.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             if (livro.generos_ids) {
                 const ids = String(livro.generos_ids).split(',');
