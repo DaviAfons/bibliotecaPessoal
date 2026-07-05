@@ -452,6 +452,27 @@
     margin-bottom: 28px;
 }
 
+.close-glass-modal {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--texto-claro);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.7;
+}
+
+.close-glass-modal:hover {
+    color: var(--vinho);
+    opacity: 1;
+    transform: scale(1.15);
+}
+
 .modal-actions {
     display: flex;
     gap: 12px;
@@ -505,6 +526,8 @@
 }
 
 .btn-modal-confirm:active { transform: scale(0.97); }
+
+
 
 /* ── SKELETON LOADING ── */
 .skeleton-card {
