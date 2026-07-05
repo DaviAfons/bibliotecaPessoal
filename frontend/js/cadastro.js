@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         charCount: document.querySelector('.char-count'),
         strengthBar: document.querySelector('.strength-bar'),
         strengthText: document.querySelector('.strength-text span'),
-        senhaMatch: document.getElementById('senhaMatch')
+        senhaMatch: document.getElementById('senhaMatch'),
+        progressContainer: document.querySelector('.progress-steps'),
+        steps: document.querySelectorAll('.step')
     };
 
     // 2. Configurações Iniciais de Data
@@ -59,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const res = configs[strength];
         if (ui.strengthBar) {
-            // Envia os valores dinâmicos para as variáveis CSS criadas acima
+            // Envia os valores dinâmicos para as variáveis CSS
             ui.strengthBar.style.setProperty('--bar-width', `${(strength / 4) * 100}%`);
             ui.strengthBar.style.setProperty('--bar-color', res.color);
             
@@ -92,7 +94,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 4. Submissão do Formulário (Integrado com o backend)
+    // 4. Lógica da Barra de Progresso Dinâmica
+    const updateDynamicProgress = () => {
+        // Coleta os valores atuais
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const dataNasc = forms.dataNasc ? forms.dataNasc.value : '';
+        const senha = forms.senha.value;
+        const confirmar = forms.confirmar.value;
+        const termos = document.getElementById('termos').checked;
+
+        // Regras de validação para cada etapa
+        const step1Valido = nome.length > 2 && email.includes('@') && email.includes('.') && dataNasc !== '';
+        const step2Valido = step1Valido && senha.length >= 6 && senha === confirmar;
+        const step3Valido = step2Valido && termos;
+
+        let progressWidth = '15%'; // Estado inicial
+
+        if (ui.steps && ui.steps.length > 2) {
+            // Reseta as etapas visuais
+            ui.steps[1].classList.remove('active');
+            ui.steps[2].classList.remove('active');
+
+            // Avança para a Etapa 2
+            if (step1Valido) {
+                progressWidth = '50%';
+                ui.steps[1].classList.add('active');
+            }
+            
+            // Avança para a Etapa 3
+            if (step2Valido) {
+                progressWidth = '85%';
+                ui.steps[2].classList.add('active');
+            }
+
+            // Finaliza 100% da barra
+            if (step3Valido) {
+                progressWidth = '100%';
+            }
+        }
+
+        // Aplica a largura na variável CSS da barra
+        if (ui.progressContainer) {
+            ui.progressContainer.style.setProperty('--progress', progressWidth);
+        }
+    };
+
+    // 5. Submissão do Formulário (Integrado com o backend)
     window.cadastrar = async (event) => {
         event.preventDefault();
         
@@ -121,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.success) {
-                // Exibe o modal de sucesso definido no CSS/HTML
                 const modal = document.getElementById('successModal');
                 if (modal) {
                     modal.classList.add('show');
@@ -134,16 +181,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 5. Event Listeners
-    if (forms.senha) forms.senha.addEventListener('input', () => { updatePasswordStrength(); checkPasswordMatch(); });
+    // 6. Event Listeners
+    if (forms.senha) {
+        forms.senha.addEventListener('input', () => { 
+            updatePasswordStrength(); 
+            checkPasswordMatch(); 
+        });
+    }
     if (forms.confirmar) forms.confirmar.addEventListener('input', checkPasswordMatch);
     if (forms.bio) forms.bio.addEventListener('input', updateBio);
     
-    // Iniciar contagem da Bio no carregamento
+    // Adiciona o gatilho da barra de progresso a todos os inputs do formulário
+    const formInputs = document.querySelectorAll('#cadastroForm input, #cadastroForm textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('input', updateDynamicProgress);
+        input.addEventListener('change', updateDynamicProgress);
+    });
+    
+    // Chamadas iniciais para configurar o estado visual assim que a página carrega
     updateBio();
+    updateDynamicProgress();
 });
 
-// Função de Notificação Global
+// ==========================================
+// Funções Globais (Fora do DOMContentLoaded)
+// ==========================================
+
+// Notificação Global (Toast)
 function showNotification(message, type = 'info') {
     const iconMap = { 
         success: 'check-circle', 
@@ -161,10 +225,8 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Pequeno delay para a animação do CSS funcionar
     setTimeout(() => notification.classList.add('show'), 10);
     
-    // Remove automaticamente após 4 segundos
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 400);
@@ -175,3 +237,21 @@ function showNotification(message, type = 'info') {
 window.redirectToLogin = () => {
     window.location.href = '../../index.html';
 };
+
+// Listeners do Modal
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('successModal');
+    if (!modal) return;
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.remove('show');
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('show')) {
+            modal.classList.remove('show');
+        }
+    });
+});
