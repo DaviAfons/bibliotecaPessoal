@@ -194,7 +194,7 @@
     margin-bottom: 45px;
     position: relative;
     /* Variável CSS que o JS vai controlar (começa em 15%) */
-    --progress: 15%; 
+    --progress: 15%;
 }
 
 .progress-steps::before {
@@ -733,5 +733,112 @@
 
     100% {
         transform: translate(30px, 30px) rotate(15deg);
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Reduz o padding gigante da caixa branca para dar espaço aos inputs */
+    .box {
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+
+    /* Ajuste dos Títulos e Citação */
+    .header h1 {
+        font-size: 2.2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+
+    .quote-container {
+        padding: 18px 15px;
+        margin: 15px 10px 30px;
+    }
+
+    .quote-text {
+        font-size: 1.05rem;
+    }
+
+    /* --- Correção principal: A Barra de Progresso --- */
+    .progress-steps {
+        margin-bottom: 35px;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+        box-shadow: 0 0 0 4px var(--branco);
+    }
+
+    .step.active .step-number {
+        box-shadow: 0 0 0 4px var(--branco), 0 0 0 7px var(--dourado-suave);
+    }
+
+    /* Ajusta a altura da linha para bater com a nova bolinha menor */
+    .progress-steps::before,
+    .progress-steps::after {
+        top: 14px;
+    }
+
+    /* Impede o texto de sobrepor: centraliza, quebra a linha e diminui a fonte */
+    .step-text {
+        font-size: 0.75rem;
+        text-align: center;
+        max-width: 75px;
+        line-height: 1.2;
+        margin-top: 6px;
+    }
+
+    /* --- Correção dos Inputs e Termos --- */
+    .box input,
+    .box textarea,
+    .box select {
+        padding: 15px;
+        /* Reduz a altura dos inputs no celular */
+        font-size: 0.95rem;
+    }
+
+    .terms {
+        padding: 18px 15px;
+        /* Reduz o espaço da caixa de termos */
+        align-items: flex-start;
+    }
+
+    .terms label {
+        font-size: 0.85rem;
+    }
+
+    .terms input[type="checkbox"] {
+        transform: scale(1.15);
+        /* Diminui levemente a checkbox */
+        margin-top: 2px;
+    }
+
+    .btn-submit {
+        padding: 18px;
+        font-size: 1.05rem;
+        margin-top: 25px;
+    }
+}
+
+/* Telas MUITO estreitas  */
+@media (max-width: 400px) {
+
+    /* Se a tela for muito pequena, escondemos o texto da etapa e deixamos só o número para não quebrar o layout */
+    .step-text {
+        display: none;
+    }
+
+    .progress-steps {
+        margin-bottom: 25px;
+    }
+
+    .header h1 {
+        font-size: 1.9rem;
     }
 }
